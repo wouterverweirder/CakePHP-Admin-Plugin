@@ -50,3 +50,5 @@ Customization
 There are a couple of options, regarding fields to hide, mapping of input types to model properties, … you can set in `app/Plugin/Admin/Config/console.php`
 
 Another thing you might want to update is the menu. This is done in the AppController of the plugin `app/Plugin/Admin/Controller/AdminAppController.php` by making changes to the `$menuItems` variable in the `beforeRender()` callback.
+
+You can also bake additional, custom methods into the admin controllers. Create a directory with the name of your controller (eg: Users) in the `app/Plugin/Admin/Console/Templates/backsite/actions` folder. Inside that directory, you create a file named `additional_functions.ctp` with your extra functions. This is done for the Users controller by default, to add the login() and logout() functions - so you can base your templates on that.

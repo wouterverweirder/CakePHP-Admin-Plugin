@@ -1,18 +1,9 @@
-<?php if($controllerName == 'Users'):?>
-    public function login() {
-        if ($this->Auth->login()) {
-            $this->redirect($this->Auth->redirect());
-        } else {
-            if($this->request->isPost()) {
-                $this->Auth->flash(__('Invalid username or password, try again'));
-            }
-        }
+<?php
+    if(file_exists(__DIR__ . DIRECTORY_SEPARATOR . $controllerName . DIRECTORY_SEPARATOR . 'additional_functions.ctp' )) {
+        require __DIR__ . DIRECTORY_SEPARATOR . $controllerName . DIRECTORY_SEPARATOR . 'additional_functions.ctp';
+        echo "\n";
     }
-
-    public function logout() {
-        $this->redirect($this->Auth->logout());
-    }
-<?php endif;?>
+?>
 	public function index() {
 	    $conditions = array();
         $<?php echo $pluralName ?>TableURL = array('controller' => '<?php echo $backendPluginNameUnderscored . '_' . $controllerPath; ?>', 'action' => 'index');
