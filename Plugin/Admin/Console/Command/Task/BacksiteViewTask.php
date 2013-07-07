@@ -52,9 +52,13 @@ class BacksiteViewTask extends BakeTask {
 		}
 		$this->Template->set('action', $action);
 		$this->Template->set($vars);
-		$template = $this->getViewTemplate($action);
+		$template = $this->getViewTemplate($controllerName, $action);
 		if ($template) {
-			return $this->Template->generate('views', $template);
+			if(is_array($template)) {
+				return $this->Template->generate($template['folder'], $template['action']);
+			} else {
+				return $this->Template->generate('views', $template);
+			}
 		}
 		return false;
 	}
@@ -72,7 +76,7 @@ class BacksiteViewTask extends BakeTask {
         return $this->createFile($filename, $content);
 	}
 
-	public function getViewTemplate($action) {
+	public function getViewTemplate($controllerName, $action) {
 		if ($action != $this->template && in_array($action, $this->noViewTemplateActions)) {
 			return false;
 		}
@@ -80,6 +84,9 @@ class BacksiteViewTask extends BakeTask {
 			return $this->template;
 		}
 		$themePath = $this->Template->getThemePath();
+		if (file_exists($themePath . 'views' . DS . $controllerName . DS . $action . '.ctp')) {
+			return array('folder' => 'views' . DS . $controllerName, 'action' => $action);
+		}
 		if (file_exists($themePath . 'views' . DS . $action . '.ctp')) {
 			return $action;
 		}
