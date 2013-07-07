@@ -26,6 +26,16 @@ Installation
 		class AppModel extends Model {
 			public $actsAs = array('Admin.ToString');
 
+5. Go to http://localhost/yourproject/admin/users/add and add the first admin user
+6. Remove the auth allow lines from the AdminAppController beforeFilter() method to activate the authentication:
+
+		public function beforeFilter() {
+        	//TODO: remove after you created the first user
+        	$this->Auth->allow();
+        	return;
+            //end remove
+
+
 Running the bake shell
 ----------------------
 Most of the time, you will run the bake shell, to generate the latest controllers & views, based on your models. So, each time you make changes in your database layout or model classes, make sure to run the shell:

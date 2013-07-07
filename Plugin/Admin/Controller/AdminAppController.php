@@ -24,6 +24,10 @@ class AdminAppController extends AppController {
     }
 
 	public function beforeFilter() {
+        //remove this block after you created the first user
+        $this->Auth->allow();
+        return;
+        //end remove this block after you created the first user
 		$this->Auth->authorize = array('Controller');
 		$this->Auth->authenticate = array('Form' => array(
                 'fields' => array('username' => 'email')
