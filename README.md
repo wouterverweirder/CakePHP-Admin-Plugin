@@ -55,6 +55,13 @@ There are a couple of options, regarding fields to hide, mapping of input types 
 
 Another thing you might want to update is the menu. This is done in the AppController of the plugin `app/Plugin/Admin/Controller/AdminAppController.php` by making changes to the `$menuItems` variable in the `beforeRender()` callback.
 
+### Custom controller methods
+
+You can use your own, custom methods in admin controllers:
+
+1. Create a directory with the name of your controller (eg: Users) in the `app/Plugin/Admin/Console/Templates/backsite/actions` folder.
+2. Inside that directory, you create a file with the name of your action (eg: view.ctp). 
+
 ### Additional controller methods
 
 You can also bake additional, custom methods into the admin controllers.
