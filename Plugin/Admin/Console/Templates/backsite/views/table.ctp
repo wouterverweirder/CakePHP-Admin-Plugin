@@ -5,7 +5,7 @@
     'evalScripts' => true
 ));?>\n";
 ?>
-<table cellpadding="0" cellspacing="0">
+<table class="table table-striped">
 <tr>
 <?php
     $i = 0;
@@ -150,9 +150,9 @@ echo "\t<tr>\n";
     }
 
     echo "\t\t<td class=\"actions\">\n";
-    echo "\t\t\t<?php echo \$this->Html->link(__('View'), array('plugin' => '{$backendPluginNameUnderscored}', 'controller' => '{$backendPluginNameUnderscored}_{$controllerPath}', 'action' => 'view', \${$singularVar}['{$modelClass}']['{$primaryKey}'])); ?>\n";
-    echo "\t\t\t<?php echo \$this->Html->link(__('Edit'), array('plugin' => '{$backendPluginNameUnderscored}', 'controller' => '{$backendPluginNameUnderscored}_{$controllerPath}', 'action' => 'edit', \${$singularVar}['{$modelClass}']['{$primaryKey}'])); ?>\n";
-    echo "\t\t\t<?php echo \$this->Form->postLink(__('Delete'), array('plugin' => '{$backendPluginNameUnderscored}', 'controller' => '{$backendPluginNameUnderscored}_{$controllerPath}', 'action' => 'delete', \${$singularVar}['{$modelClass}']['{$primaryKey}']), null, __('Are you sure you want to delete # %s?', \${$singularVar}['{$modelClass}']['{$primaryKey}'])); ?>\n";
+    echo "\t\t\t<?php echo \$this->Html->link(__('View'), array('plugin' => '{$backendPluginNameUnderscored}', 'controller' => '{$backendPluginNameUnderscored}_{$controllerPath}', 'action' => 'view', \${$singularVar}['{$modelClass}']['{$primaryKey}']), array('class' => 'btn btn-info btn-mini')); ?>\n";
+    echo "\t\t\t<?php echo \$this->Html->link(__('Edit'), array('plugin' => '{$backendPluginNameUnderscored}', 'controller' => '{$backendPluginNameUnderscored}_{$controllerPath}', 'action' => 'edit', \${$singularVar}['{$modelClass}']['{$primaryKey}']), array('class' => 'btn btn-mini')); ?>\n";
+    echo "\t\t\t<?php echo \$this->Form->postLink(__('Delete'), array('plugin' => '{$backendPluginNameUnderscored}', 'controller' => '{$backendPluginNameUnderscored}_{$controllerPath}', 'action' => 'delete', \${$singularVar}['{$modelClass}']['{$primaryKey}']), array('class' => 'btn btn-danger btn-mini'), __('Are you sure you want to delete # %s?', \${$singularVar}['{$modelClass}']['{$primaryKey}'])); ?>\n";
     echo "\t\t</td>\n";
 echo "\t</tr>\n";
 
@@ -168,14 +168,16 @@ echo \$this->Paginator->counter(array(
 ?>";?>
 </p>
 
-<div class="paging">
+<div class="pagination">
+    <ul>
 <?php
     echo "<?php\n";
-    echo "\t\techo \$this->Paginator->prev('< ' . __('previous'), array('model' => '{$modelClass}'), null, array('class' => 'prev disabled'));\n";
-    echo "\t\techo \$this->Paginator->numbers(array('separator' => '', 'model' => '{$modelClass}'));\n";
-    echo "\t\techo \$this->Paginator->next(__('next') . ' >', array('model' => '{$modelClass}'), null, array('class' => 'next disabled'));\n";
+    echo "\t\techo '<li>' . \$this->Paginator->prev('Prev', array('model' => '{$modelClass}'), null, array('class' => 'prev disabled')) . '</li>';\n";
+    echo "\t\techo \$this->Paginator->numbers(array('separator' => '', 'tag' => 'li', 'currentTag' => 'span', 'model' => '{$modelClass}'));\n";
+    echo "\t\techo '<li>' . \$this->Paginator->next('Next', array('model' => '{$modelClass}'), null, array('class' => 'next disabled')) . '</li>';\n";
     echo "\t?>\n";
 ?>
+    </ul>
 </div>
 
 <?php echo "<?php

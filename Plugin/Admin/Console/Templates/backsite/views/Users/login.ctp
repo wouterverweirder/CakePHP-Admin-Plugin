@@ -8,5 +8,5 @@
         <?php echo "echo \$this->Form->input('password');\n"; ?>
         <?php echo "?>\n"; ?>
     </fieldset>
-<?php echo "<?php echo \$this->Form->end(__('Login'));?>\n"; ?>
+<?php echo "<?php echo \$this->Form->end(array('label' => __('Login'), 'class' => 'btn btn-primary'));?>\n"; ?>
 </div>

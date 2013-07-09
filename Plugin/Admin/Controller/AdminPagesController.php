@@ -52,4 +52,14 @@ class AdminPagesController extends AdminAppController {
 		$this->set(compact('page', 'subpage', 'title_for_layout'));
 		$this->render(implode('/', $path));
 	}
+
+	public function auth_redirect_fix() {
+		$url = $this->request->here;
+		$pos = strpos($url, '/' . basename(ROOT));
+		while($pos === 0) {
+			$url = substr($url, strlen('/' . basename(ROOT)));
+			$pos = strpos($url, '/' . basename(ROOT));
+		}
+		$this->redirect($url);
+	}
 }

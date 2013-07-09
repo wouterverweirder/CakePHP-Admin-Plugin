@@ -1,78 +1,86 @@
 <h2><?php echo "<?php  echo __('{$singularHumanName}') . ': ' . \${$singularVar}['{$modelClass}']['toString'];?>";?></h2>
-<div id="tabs">
-    <ul>
-        <li><a href="#tabs-1"><?php echo "<?php  echo __('{$singularHumanName} Details');?>";?></a></li>
+<ul class="nav nav-tabs">
+    <li class="active"><a href="#tabs-1" data-toggle="tab"><?php echo "<?php  echo __('{$singularHumanName} Details');?>";?></a></li>
 <?php
     //create tabs for associated models
     $tabnr = 1;
     if (!empty($associations['hasOne'])) :
         foreach ($associations['hasOne'] as $alias => $details):
             ++$tabnr;
-            echo "\t\t<li><a href=\"#tabs-{$tabnr}\"><?php echo __('" . Inflector::humanize($details['controller']) . "');?></a></li>\n";
+            echo "\t\t<li><a href=\"#tabs-{$tabnr}\" data-toggle=\"tab\"><?php echo __('" . Inflector::humanize($details['controller']) . "');?></a></li>\n";
         endforeach;
     endif;
     if (!empty($associations['hasMany'])) :
         foreach ($associations['hasMany'] as $alias => $details):
             ++$tabnr;
-            echo "\t\t<li><a href=\"#tabs-{$tabnr}\"><?php echo __('" . Inflector::humanize($details['controller']) . "');?></a></li>\n";
+            echo "\t\t<li><a href=\"#tabs-{$tabnr}\" data-toggle=\"tab\"><?php echo __('" . Inflector::humanize($details['controller']) . "');?></a></li>\n";
         endforeach;
     endif;
     if (!empty($associations['hasAndBelongsToMany'])) :
         foreach ($associations['hasAndBelongsToMany'] as $alias => $details):
             ++$tabnr;
-            echo "\t\t<li><a href=\"#tabs-{$tabnr}\"><?php echo __('" . Inflector::humanize($details['controller']) . "');?></a></li>\n";
+            echo "\t\t<li><a href=\"#tabs-{$tabnr}\" data-toggle=\"tab\"><?php echo __('" . Inflector::humanize($details['controller']) . "');?></a></li>\n";
         endforeach;
     endif;
 ?>
-    </ul>
-
-    <div id="tabs-1">
-        <div class="<?php echo $pluralVar;?> view">
-            <dl>
-            <?php
-            foreach ($fields as $field) {
-            	$isKey = false;
-            	if (!empty($associations['belongsTo'])) {
-            		foreach ($associations['belongsTo'] as $alias => $details) {
-            			if ($field === $details['foreignKey']) {
-            				$isKey = true;
-                            $associationControllerName = Inflector::pluralize(Inflector::camelize($details['controller']));
-                            $associationControllerPath = $details['controller'];
-            				echo "\t\t\t\t<dt><?php echo __('" . Inflector::humanize(Inflector::underscore($alias)) . "'); ?></dt>\n";
-                            echo "\t\t<dd>\n\t\t\t<?php echo \$this->Html->link(\${$singularVar}['{$alias}']['toString'], array('plugin' => '{$backendPluginNameUnderscored}', 'controller' => '{$backendPluginNameUnderscored}_{$associationControllerPath}', 'action' => 'view', \${$singularVar}['{$alias}']['{$details['primaryKey']}'])); ?>\n\t\t\t&nbsp;\n\t\t</dd>\n";
-                            break;
-            			}
-            		}
-            	}
-            	if ($isKey !== true) {
-            		echo "\t\t\t\t<dt><?php echo __('" . Inflector::humanize($field) . "'); ?></dt>\n";
-            		echo "\t\t\t\t<dd>\n\t\t\t";
-                    switch($field) {
-                        case 'image1':
-                        case 'image2':
-                            echo "<?php if(!empty(\${$singularVar}['{$modelClass}']['{$field}'])) echo \$this->Html->image('/files/images/' . \${$singularVar}['{$modelClass}']['{$field}']); ?>\n";
-                            break;
-                        default:
-                            echo "<?php echo h(\${$singularVar}['{$modelClass}']['{$field}']); ?>\n";
-                            break;
+</ul>
+<div class="tab-content">
+    <div id="tabs-1" class="tab-pane active">
+        <div class="<?php echo $pluralVar;?> view container-fluid">
+            <div class="row-fluid">
+                <div class="span9">
+                    <dl>
+                    <?php
+                    foreach ($fields as $field) {
+                        $isKey = false;
+                        if (!empty($associations['belongsTo'])) {
+                            foreach ($associations['belongsTo'] as $alias => $details) {
+                                if ($field === $details['foreignKey']) {
+                                    $isKey = true;
+                                    $associationControllerName = Inflector::pluralize(Inflector::camelize($details['controller']));
+                                    $associationControllerPath = $details['controller'];
+                                    echo "\t\t\t\t<dt><?php echo __('" . Inflector::humanize(Inflector::underscore($alias)) . "'); ?></dt>\n";
+                                    echo "\t\t<dd>\n\t\t\t<?php echo \$this->Html->link(\${$singularVar}['{$alias}']['toString'], array('plugin' => '{$backendPluginNameUnderscored}', 'controller' => '{$backendPluginNameUnderscored}_{$associationControllerPath}', 'action' => 'view', \${$singularVar}['{$alias}']['{$details['primaryKey']}'])); ?>\n\t\t\t&nbsp;\n\t\t</dd>\n";
+                                    break;
+                                }
+                            }
+                        }
+                        if ($isKey !== true) {
+                            echo "\t\t\t\t<dt><?php echo __('" . Inflector::humanize($field) . "'); ?></dt>\n";
+                            echo "\t\t\t\t<dd>\n\t\t\t";
+                            switch($field) {
+                                case 'image1':
+                                case 'image2':
+                                    echo "<?php if(!empty(\${$singularVar}['{$modelClass}']['{$field}'])) echo \$this->Html->image('/files/images/' . \${$singularVar}['{$modelClass}']['{$field}']); ?>\n";
+                                    break;
+                                default:
+                                    echo "<?php echo h(\${$singularVar}['{$modelClass}']['{$field}']); ?>\n";
+                                    break;
+                            }
+                            echo "\t\t\t&nbsp;\n\t\t</dd>\n";
+                        }
                     }
-                    echo "\t\t\t&nbsp;\n\t\t</dd>\n";
-            	}
-            }
 
-            ?>
-            	</dl>
-        </div>
-        <div class="actions">
-            <h3><?php echo "<?php echo __('Actions'); ?>"; ?></h3>
-            <ul>
-        <?php
-            echo "\t\t\t\t<li><?php echo \$this->Html->link(__('Edit " . $singularHumanName ."'), array('action' => 'edit', \${$singularVar}['{$modelClass}']['{$primaryKey}'])); ?> </li>\n";
-            echo "\t\t\t\t<li><?php echo \$this->Form->postLink(__('Delete " . $singularHumanName . "'), array('action' => 'delete', \${$singularVar}['{$modelClass}']['{$primaryKey}']), null, __('Are you sure you want to delete # %s?', \${$singularVar}['{$modelClass}']['{$primaryKey}'])); ?> </li>\n";
-            echo "\t\t\t\t<li><?php echo \$this->Html->link(__('List " . $pluralHumanName . "'), array('action' => 'index')); ?> </li>\n";
-            echo "\t\t\t\t<li><?php echo \$this->Html->link(__('New " . $singularHumanName . "'), array('action' => 'add')); ?> </li>\n";
-        ?>
-            </ul>
+                    ?>
+                    </dl>
+                </div>
+                <div class="actions span2">
+                    <div class="btn-group">
+                        <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#">
+                            Actions
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                <?php
+                    echo "\t\t\t\t<li><?php echo \$this->Html->link(__('Edit " . $singularHumanName ."'), array('action' => 'edit', \${$singularVar}['{$modelClass}']['{$primaryKey}'])); ?> </li>\n";
+                    echo "\t\t\t\t<li><?php echo \$this->Form->postLink(__('Delete " . $singularHumanName . "'), array('action' => 'delete', \${$singularVar}['{$modelClass}']['{$primaryKey}']), null, __('Are you sure you want to delete # %s?', \${$singularVar}['{$modelClass}']['{$primaryKey}'])); ?> </li>\n";
+                    echo "\t\t\t\t<li><?php echo \$this->Html->link(__('List " . $pluralHumanName . "'), array('action' => 'index')); ?> </li>\n";
+                    echo "\t\t\t\t<li><?php echo \$this->Html->link(__('New " . $singularHumanName . "'), array('action' => 'add')); ?> </li>\n";
+                ?>
+                        </ul>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -83,7 +91,7 @@ if (!empty($associations['hasOne'])) :
         $associationControllerName = Inflector::pluralize(Inflector::camelize($details['controller']));
         $associationControllerPath = $details['controller'];
     ?>
-    <div id="tabs-<?php echo ++$tabnr; ?>">
+    <div id="tabs-<?php echo ++$tabnr; ?>" class="tab-pane">
         <div class="related">
             <h3><?php echo "<?php echo __('Related " . Inflector::humanize($details['controller']) . "');?>";?></h3>
         <?php echo "<?php if (!empty(\${$singularVar}['{$alias}'])):?>\n";?>
@@ -97,9 +105,7 @@ if (!empty($associations['hasOne'])) :
             </dl>
         <?php echo "<?php endif; ?>\n";?>
             <div class="actions">
-                <ul>
-                    <li><?php echo "<?php echo \$this->Html->link(__('Edit " . Inflector::humanize(Inflector::underscore($alias)) . "'), array('plugin' => '{$backendPluginNameUnderscored}', 'controller' => '{$backendPluginNameUnderscored}_{$associationControllerPath}', 'action' => 'edit', \${$singularVar}['{$alias}']['{$details['primaryKey']}'])); ?></li>\n";?>
-                </ul>
+                <?php echo "<?php echo \$this->Html->link(__('Edit " . Inflector::humanize(Inflector::underscore($alias)) . "'), array('plugin' => '{$backendPluginNameUnderscored}', 'controller' => '{$backendPluginNameUnderscored}_{$associationControllerPath}', 'action' => 'edit', \${$singularVar}['{$alias}']['{$details['primaryKey']}']), array('class' => 'btn')); ?></li>\n";?>
             </div>
         </div>
     </div>
@@ -116,16 +122,14 @@ foreach ($associations['hasMany'] as $alias => $details):
     $otherControllerName = Inflector::pluralize(Inflector::camelize($details['controller']));
     $otherControllerPath = $details['controller'];
         ?>
-    <div id="tabs-<?php echo ++$tabnr; ?>">
+    <div id="tabs-<?php echo ++$tabnr; ?>" class="tab-pane">
         <div class="related">
         	<h3><?php echo "<?php echo __('Related " . $otherPluralHumanName . "');?>";?></h3>
             <div class="<?php echo $otherPluralVar;?> table">
             <?php echo "<?php echo \$this->element('../{$backendPluginName}{$otherControllerName}/table');?>\n"; ?>
             </div>
             <div class="actions">
-                <ul>
-                    <li><?php echo "<?php echo \$this->Html->link(__('New " . Inflector::humanize(Inflector::underscore($alias)) . "'), array('plugin' => '{$backendPluginNameUnderscored}', 'controller' => '{$backendPluginNameUnderscored}_{$otherControllerPath}', 'action' => 'add', '{$details['foreignKey']}' => \${$singularVar}['{$modelClass}']['{$primaryKey}']));?>";?> </li>
-                </ul>
+                <?php echo "<?php echo \$this->Html->link(__('New " . Inflector::humanize(Inflector::underscore($alias)) . "'), array('plugin' => '{$backendPluginNameUnderscored}', 'controller' => '{$backendPluginNameUnderscored}_{$otherControllerPath}', 'action' => 'add', '{$details['foreignKey']}' => \${$singularVar}['{$modelClass}']['{$primaryKey}']), array('class' => 'btn btn-primary'));?>";?> </li>
             </div>
         </div>
     </div>
@@ -142,7 +146,7 @@ foreach ($associations['hasAndBelongsToMany'] as $alias => $details):
     $associationControllerName = Inflector::pluralize(Inflector::camelize($details['controller']));
     $associationControllerPath = $details['controller'];
 	?>
-    <div id="tabs-<?php echo ++$tabnr; ?>">
+    <div id="tabs-<?php echo ++$tabnr; ?>" class="tab-pane">
         <div class="related">
         	<h3><?php echo "<?php echo __('Related " . $otherPluralHumanName . "');?>";?></h3>
         	<?php echo "<?php if (!empty(\${$singularVar}['{$alias}'])):?>\n";?>
@@ -165,9 +169,9 @@ foreach ($associations['hasAndBelongsToMany'] as $alias => $details):
         			}
 
         			echo "\t\t\t<td class=\"actions\">\n";
-        			echo "\t\t\t\t<?php echo \$this->Html->link(__('View'), array('plugin' => '{$backendPluginNameUnderscored}', 'controller' => '{$backendPluginNameUnderscored}_{$associationControllerPath}', 'action' => 'view', \${$otherSingularVar}['{$details['primaryKey']}'])); ?>\n";
-        			echo "\t\t\t\t<?php echo \$this->Html->link(__('Edit'), array('plugin' => '{$backendPluginNameUnderscored}', 'controller' => '{$backendPluginNameUnderscored}_{$associationControllerPath}', 'action' => 'edit', \${$otherSingularVar}['{$details['primaryKey']}'])); ?>\n";
-        			echo "\t\t\t\t<?php echo \$this->Form->postLink(__('Delete'), array('plugin' => '{$backendPluginNameUnderscored}', 'controller' => '{$backendPluginNameUnderscored}_{$associationControllerPath}', 'action' => 'delete', \${$otherSingularVar}['{$details['primaryKey']}']), null, __('Are you sure you want to delete # %s?', \${$otherSingularVar}['{$details['primaryKey']}'])); ?>\n";
+        			echo "\t\t\t\t<?php echo \$this->Html->link(__('View'), array('plugin' => '{$backendPluginNameUnderscored}', 'controller' => '{$backendPluginNameUnderscored}_{$associationControllerPath}', 'action' => 'view', \${$otherSingularVar}['{$details['primaryKey']}']), array('class' => 'btn btn-info btn-mini')); ?>\n";
+        			echo "\t\t\t\t<?php echo \$this->Html->link(__('Edit'), array('plugin' => '{$backendPluginNameUnderscored}', 'controller' => '{$backendPluginNameUnderscored}_{$associationControllerPath}', 'action' => 'edit', \${$otherSingularVar}['{$details['primaryKey']}']), array('class' => 'btn btn-mini')); ?>\n";
+        			echo "\t\t\t\t<?php echo \$this->Form->postLink(__('Delete'), array('plugin' => '{$backendPluginNameUnderscored}', 'controller' => '{$backendPluginNameUnderscored}_{$associationControllerPath}', 'action' => 'delete', \${$otherSingularVar}['{$details['primaryKey']}']), array('class' => 'btn btn-danger btn-mini'), __('Are you sure you want to delete # %s?', \${$otherSingularVar}['{$details['primaryKey']}'])); ?>\n";
         			echo "\t\t\t</td>\n";
         		echo "\t\t</tr>\n";
 
@@ -176,16 +180,9 @@ foreach ($associations['hasAndBelongsToMany'] as $alias => $details):
         	</table>
         <?php echo "<?php endif; ?>\n\n";?>
         	<div class="actions">
-        		<ul>
-        			<li><?php echo "<?php echo \$this->Html->link(__('New " . Inflector::humanize(Inflector::underscore($alias)) . "'), array('plugin' => '{$backendPluginNameUnderscored}', 'controller' => '{$backendPluginNameUnderscored}_{$associationControllerPath}', 'action' => 'add'));?>";?> </li>
-        		</ul>
+        		<?php echo "<?php echo \$this->Html->link(__('New " . Inflector::humanize(Inflector::underscore($alias)) . "'), array('plugin' => '{$backendPluginNameUnderscored}', 'controller' => '{$backendPluginNameUnderscored}_{$associationControllerPath}', 'action' => 'add'), array('class' => 'btn btn-primary'));?>";?> </li>
         	</div>
         </div>
     </div>
 <?php endforeach;?>
 </div>
-<script type="text/javascript">
-    $(function() {
-        $( "#tabs" ).tabs();
-    });
-</script>

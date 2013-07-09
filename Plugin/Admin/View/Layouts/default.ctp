@@ -7,17 +7,13 @@
 		<?php echo $title_for_layout; ?>
 	</title>
 
-	<link rel="stylesheet" type="text/css" href="<?php echo $this->Html->url('/' . $backendPluginNameUnderscored . '-plugin/css/admin/admin.css');?>" />
-
 	<?php
 		echo $this->Html->meta('icon');
 
-        echo $this->Html->css('/' . $backendPluginNameUnderscored . '-plugin/css/smoothness/jquery-ui.css');
-        echo $this->Html->css('/' . $backendPluginNameUnderscored . '-plugin/css/dropdown/dropdown.css');
-        echo $this->Html->css('/' . $backendPluginNameUnderscored . '-plugin/css/dropdown/themes/default/default.css');
+        echo $this->Html->css('/' . $backendPluginNameUnderscored . '-plugin/css/bootstrap.min.css');
 
 		echo $this->Html->script('/' . $backendPluginNameUnderscored . '-plugin/js/jquery/jquery-1.8.2.min.js');
-        echo $this->Html->script('/' . $backendPluginNameUnderscored . '-plugin/js/jquery/jquery-ui.js');
+		echo $this->Html->script('/' . $backendPluginNameUnderscored . '-plugin/js/bootstrap/bootstrap.min.js');
         echo $this->Html->script('/' . $backendPluginNameUnderscored . '-plugin/js/ckeditor/ckeditor.js');
         echo $this->Html->script('/' . $backendPluginNameUnderscored . '-plugin/js/ckfinder/ckfinder.js');
 
@@ -29,17 +25,23 @@
 	?>
 </head>
 <body>
-	<div id="container">
-		<div id="header">
-			<h1><?php echo $backendPluginName; ?></h1>
-            <?php
-                if(!empty($menuItems)) echo $this->element('menu', array('menuItems' => $menuItems));
-            ?>
+	<div class="container">
+		<div class="navbar">
+			<div class="navbar-inner">
+				<a class="brand" href="#"><?php echo $backendPluginName; ?></a>
+				<ul class="nav">
+					<li><?php echo $this->Html->link('Overview', '/' . $backendPluginNameUnderscored);?></li>
+					<li><?php echo $this->Html->link('Users', '/' . $backendPluginNameUnderscored . '/users');?></li>
+				</ul>
+				<ul class="nav pull-right">
+					<li><?php echo $this->Html->link('Logout', '/' . $backendPluginNameUnderscored . '/users/logout');?></li>
+				</ul>
+			</div>
 		</div>
 		<div id="content">
 
-			<?php echo $this->Session->flash('bad'); ?>
-            <?php echo $this->Session->flash('good'); ?>
+			<?php echo $this->Session->flash('bad', array('params' => array('class' => 'alert alert-error'))); ?>
+            <?php echo $this->Session->flash('good', array('params' => array('class' => 'alert alert-success'))); ?>
 
 			<?php echo $this->fetch('content'); ?>
 		</div>

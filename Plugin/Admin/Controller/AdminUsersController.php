@@ -22,7 +22,8 @@ class AdminUsersController extends AdminAppController {
     public function logout() {
         $this->redirect($this->Auth->logout());
     }
-	public function index() {
+    
+    public function index() {
 	    $conditions = array();
         $usersTableURL = array('controller' => 'admin_users', 'action' => 'index');
 
@@ -67,7 +68,7 @@ class AdminUsersController extends AdminAppController {
             $this->render('table');
         }
 	}
-
+    
 	public function view($id = null) {
 		$this->User->id = $id;
 		if (!$this->User->exists()) {
@@ -76,8 +77,7 @@ class AdminUsersController extends AdminAppController {
         $user = $this->User->read(null, $id);
 		$this->set('user', $user);
 	}
-
-
+	
 	public function add() {
 		if ($this->request->is('post')) {
 			$this->User->create();
@@ -98,8 +98,7 @@ class AdminUsersController extends AdminAppController {
             }
         }
 	}
-
-
+	
 	public function edit($id = null) {
 		$this->User->id = $id;
 		if (!$this->User->exists()) {
@@ -116,9 +115,8 @@ class AdminUsersController extends AdminAppController {
             $user = $this->User->read(null, $id);
 			$this->request->data = $user;
 		}
-
 	}
-
+	
 	public function delete($id = null) {
 		if (!$this->request->is('post')) {
 			throw new MethodNotAllowedException();
@@ -134,4 +132,5 @@ class AdminUsersController extends AdminAppController {
 		$this->Session->setFlash(__('User was not deleted'), 'default', array(), 'bad');
 		$this->redirect(array('action' => 'index'));
 	}
+
 }

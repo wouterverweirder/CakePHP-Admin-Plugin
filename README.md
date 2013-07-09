@@ -2,10 +2,9 @@
 
 This is a plugin for cakephp 2.x to bake nicer looking / working admin sites.
 
-<img src="http://labs.aboutme.be/cakephp-admin/screenshot-detail.jpg">
-
 Some of the features are:
 
+*	Twitter bootstrap components
 *	Simple authorization
 *	Showing related data in tabs
 *	Ajax paginated overviews
@@ -50,10 +49,6 @@ This will automatically create / update your files in the Admin plugin directory
 ### Hiding / Mapping field types
 
 There are a couple of options, regarding fields to hide, mapping of input types to model properties, … you can set in `app/Plugin/Admin/Config/console.php`
-
-### Menu bar
-
-Another thing you might want to update is the menu. This is done in the AppController of the plugin `app/Plugin/Admin/Controller/AdminAppController.php` by making changes to the `$menuItems` variable in the `beforeRender()` callback.
 
 ### Custom controller methods
 

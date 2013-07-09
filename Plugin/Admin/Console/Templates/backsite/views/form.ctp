@@ -1,5 +1,5 @@
 <div class="<?php echo $pluralVar;?> form">
-<?php echo "<?php echo \$this->ExtendedForm->create('{$modelClass}');?>\n";?>
+<?php echo "<?php echo \$this->ExtendedForm->create('{$modelClass}', array('class' => 'form-horizontal'));?>\n";?>
 	<fieldset>
 		<legend><?php printf("<?php echo __('%s %s'); ?>", Inflector::humanize($action), $singularHumanName); ?></legend>
 <?php
@@ -61,6 +61,6 @@
 ?>
 	</fieldset>
 <?php
-	echo "<?php echo \$this->ExtendedForm->end(__('Save'));?>\n";
+    echo "<?php echo \$this->ExtendedForm->end(array('label' => __('Save {$modelClass}'), 'class' => 'btn btn-primary', 'div' => false, 'before' => '<div class=\"control-group\"><div class=\"controls\">', 'after' => \"\\n\" . \$this->Html->link(__('Cancel'), \$cancelUrl, array('class' => 'btn')) . '</div></div>'));?>\n";
 ?>
 </div>

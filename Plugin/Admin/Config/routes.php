@@ -23,3 +23,6 @@
 			}
 		}
 	}
+
+	//tmp fix for auth component redirect bug
+	Router::connect("/" . basename(ROOT) . "/{$pluginUnderscored}/*", array('plugin' => $plugin, 'controller' => $pluginUnderscored . '_pages', 'action' => 'auth_redirect_fix'));

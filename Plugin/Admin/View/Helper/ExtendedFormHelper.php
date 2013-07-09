@@ -4,6 +4,30 @@ App::uses('FormHelper', 'View/Helper');
 class ExtendedFormHelper extends FormHelper
 {
 
+    public function input($fieldName, $options = array()) {
+        $initializedOptions = $this->_initInputField($fieldName, $options);
+        if(!empty($options['label']) && !is_array($options['label'])) {
+            $options['label'] = array('text' => $options['label']);
+        }
+        if(is_array($options['label'])) {
+            $options['label']['class'] = 'control-label';
+        }
+        if(empty($options['div'])) {
+            $options['div'] = array('class' => 'control-group ' . Inflector::underscore($initializedOptions['id']));
+        }
+        if(empty($options['error'])) {
+            $options['error'] = array('attributes' => array('wrap' => 'span', 'class' => 'help-inline'));
+        }
+        if(empty($options['between'])) {
+            $options['between'] = '<div class="controls">';
+        }
+        if(empty($options['after'])) {
+            $options['after'] = '</div>';
+        }
+        $options['format'] = array('before', 'label', 'between', 'input' ,'error', 'after');
+        return parent::input($fieldName, $options);
+    }
+
     public function text($fieldName, $options = array()) {
         $options = $this->_initInputField($fieldName, $options);
         $modelKey = $this->model();

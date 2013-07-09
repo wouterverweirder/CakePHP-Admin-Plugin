@@ -18,7 +18,6 @@ class AdminAppController extends AppController {
         $this->backendPluginName = $this->plugin;
         $this->backendPluginNameUnderscored = Inflector::underscore($this->backendPluginName);
         $this->helpers[] = $this->backendPluginName . '.ExtendedForm';
-        $this->helpers[] = $this->backendPluginName . '.Menu';
         $this->set('backendPluginName', $this->backendPluginName);
         $this->set('backendPluginNameUnderscored', $this->backendPluginNameUnderscored);
     }
@@ -33,20 +32,14 @@ class AdminAppController extends AppController {
                 'fields' => array('username' => 'email')
             )
         );
+        $this->Auth->flash = array('element' => 'default', 'key' => 'auth', 'params' => array('class' => 'alert'));
         $this->Auth->loginAction = array('controller' => $this->backendPluginNameUnderscored . '_users', 'action' => 'login', 'plugin' => $this->backendPluginNameUnderscored);
         $this->Auth->logoutRedirect = array('controller' => 'pages', 'action' => 'display', 'home', 'plugin' => false);
         $this->Auth->loginRedirect = array('controller' => $this->backendPluginNameUnderscored . '_pages', 'action' => 'display', 'home', 'plugin' => Inflector::underscore($this->backendPluginName));
 	}
 
 	public function beforeRender() {
-		$menuItems = array('items' => array());
-
-        $menuItems['items']['General'] = array('target' => "/{$this->backendPluginNameUnderscored}", 'items' => array());
-        $menuItems['items']['General']['items']['Gebruikers'] = array('target' => "/{$this->backendPluginNameUnderscored}/users", 'items' => array());
-
-        $menuItems['items']['Logout'] = array ('target' => "/{$this->backendPluginNameUnderscored}/users/logout", 'items' => array ());
-
-        $this->set('menuItems', $menuItems);
+		$this->set('cancelUrl', $this->referer());
 	}
 
 	public function isAuthorized($user = null) {
