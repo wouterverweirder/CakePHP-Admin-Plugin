@@ -1,6 +1,11 @@
 <?php
 
 /**
+ * Models which are read only
+ */
+$config['admin.console.models.readonly'] = array('ConfigurationType');
+
+/**
  * Define searchable fields for the admin overview pages
  */
 $config['admin.console.views.index.searchable_fields'] = array(

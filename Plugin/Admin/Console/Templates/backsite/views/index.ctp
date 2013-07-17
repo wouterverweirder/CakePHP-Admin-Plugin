@@ -22,8 +22,13 @@
             <?php echo "<?php echo \$this->element('../{$backendPluginName}{$controllerName}/table');?>\n"; ?>
         </div>
 
+<?php
+$configReadonlyModels = Configure::read('admin.console.models.readonly');
+if(array_search($modelClass, $configReadonlyModels) === false):
+?>
         <div class="actions">
 
             <h3><?php echo "<?php echo __('Actions'); ?>"; ?></h3>
             <?php echo "<?php echo \$this->Html->link(__('New " . $singularHumanName . "'), array('action' => 'add'), array('class' => 'btn btn-primary')); ?>";?>
         </div>
+<?php endif;?>

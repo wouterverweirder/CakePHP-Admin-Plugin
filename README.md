@@ -46,6 +46,8 @@ This will automatically create / update your files in the Admin plugin directory
 
 ## Customization
 
+Take a look at `app/Plugin/Admin/Config/console.php` for some general settings.
+
 ### Hiding / Mapping field types
 
 There are a couple of options, regarding fields to hide, mapping of input types to model properties, … you can set in `app/Plugin/Admin/Config/console.php`
