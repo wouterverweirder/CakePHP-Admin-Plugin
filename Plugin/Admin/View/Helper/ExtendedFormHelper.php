@@ -85,7 +85,7 @@ class ExtendedFormHelper extends FormHelper
         $result = parent::text($fieldName, $options);
         $options = $this->_initInputField($fieldName, $options);
         //add CKEditor file browser Support
-        $result .= "<input type=\"button\" value=\"Browse Server\" id=\"{$options['id']}BrowseServerButton\" />
+        $result .= "<input type=\"button\" value=\"Browse Server\" id=\"{$options['id']}BrowseServerButton\" class=\"btn\" />
         <script type=\"text/javascript\">
         (function(){
             function setFileField(fileUrl, data) {
