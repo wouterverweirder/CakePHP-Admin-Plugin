@@ -59,3 +59,11 @@ $config['admin.console.views.table.hidden_fields'] = array(
 	    'lft',
 	    'rght')
 );
+
+/**
+ * Fields we won't show in the detail pages
+ */
+$config['admin.console.views.view.hidden_fields'] = array(
+	'all' => array(
+    )
+);

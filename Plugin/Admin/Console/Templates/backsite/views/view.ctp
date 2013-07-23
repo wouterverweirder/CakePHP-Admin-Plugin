@@ -31,33 +31,40 @@
                 <div class="span9">
                     <dl>
                     <?php
+                    $configHiddenFields = Configure::read('admin.console.views.view.hidden_fields');
+                    if(empty($configHiddenFields)) $configHiddenFields = array('all' => array());
+                    $hiddenFields = array();
+                    if(!empty($configHiddenFields['all'])) $hiddenFields = $configHiddenFields['all'];
+                    if(!empty($configHiddenFields[$modelClass])) $hiddenFields = array_merge($hiddenFields, $configHiddenFields[$modelClass]);
                     foreach ($fields as $field) {
                         $isKey = false;
-                        if (!empty($associations['belongsTo'])) {
-                            foreach ($associations['belongsTo'] as $alias => $details) {
-                                if ($field === $details['foreignKey']) {
-                                    $isKey = true;
-                                    $associationControllerName = Inflector::pluralize(Inflector::camelize($details['controller']));
-                                    $associationControllerPath = $details['controller'];
-                                    echo "\t\t\t\t<dt><?php echo __('" . Inflector::humanize(Inflector::underscore($alias)) . "'); ?></dt>\n";
-                                    echo "\t\t<dd>\n\t\t\t<?php echo \$this->Html->link(\${$singularVar}['{$alias}']['toString'], array('plugin' => '{$backendPluginNameUnderscored}', 'controller' => '{$backendPluginNameUnderscored}_{$associationControllerPath}', 'action' => 'view', \${$singularVar}['{$alias}']['{$details['primaryKey']}'])); ?>\n\t\t\t&nbsp;\n\t\t</dd>\n";
-                                    break;
+                        if(array_search($field, $hiddenFields) === false) {
+                            if (!empty($associations['belongsTo'])) {
+                                foreach ($associations['belongsTo'] as $alias => $details) {
+                                    if ($field === $details['foreignKey']) {
+                                        $isKey = true;
+                                        $associationControllerName = Inflector::pluralize(Inflector::camelize($details['controller']));
+                                        $associationControllerPath = $details['controller'];
+                                        echo "\t\t\t\t<dt><?php echo __('" . Inflector::humanize(Inflector::underscore($alias)) . "'); ?></dt>\n";
+                                        echo "\t\t<dd>\n\t\t\t<?php echo \$this->Html->link(\${$singularVar}['{$alias}']['toString'], array('plugin' => '{$backendPluginNameUnderscored}', 'controller' => '{$backendPluginNameUnderscored}_{$associationControllerPath}', 'action' => 'view', \${$singularVar}['{$alias}']['{$details['primaryKey']}'])); ?>\n\t\t\t&nbsp;\n\t\t</dd>\n";
+                                        break;
+                                    }
                                 }
                             }
-                        }
-                        if ($isKey !== true) {
-                            echo "\t\t\t\t<dt><?php echo __('" . Inflector::humanize($field) . "'); ?></dt>\n";
-                            echo "\t\t\t\t<dd>\n\t\t\t";
-                            switch($field) {
-                                case 'image1':
-                                case 'image2':
-                                    echo "<?php if(!empty(\${$singularVar}['{$modelClass}']['{$field}'])) echo \$this->Html->image('/files/images/' . \${$singularVar}['{$modelClass}']['{$field}']); ?>\n";
-                                    break;
-                                default:
-                                    echo "<?php echo h(\${$singularVar}['{$modelClass}']['{$field}']); ?>\n";
-                                    break;
+                            if ($isKey !== true) {
+                                echo "\t\t\t\t<dt><?php echo __('" . Inflector::humanize($field) . "'); ?></dt>\n";
+                                echo "\t\t\t\t<dd>\n\t\t\t";
+                                switch($field) {
+                                    case 'image1':
+                                    case 'image2':
+                                        echo "<?php if(!empty(\${$singularVar}['{$modelClass}']['{$field}'])) echo \$this->Html->image('/files/images/' . \${$singularVar}['{$modelClass}']['{$field}']); ?>\n";
+                                        break;
+                                    default:
+                                        echo "<?php echo h(\${$singularVar}['{$modelClass}']['{$field}']); ?>\n";
+                                        break;
+                                }
+                                echo "\t\t\t&nbsp;\n\t\t</dd>\n";
                             }
-                            echo "\t\t\t&nbsp;\n\t\t</dd>\n";
                         }
                     }
 
