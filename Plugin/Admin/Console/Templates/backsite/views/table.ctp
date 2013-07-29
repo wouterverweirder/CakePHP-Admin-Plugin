@@ -16,15 +16,15 @@
     if(!empty($configHiddenFields['all'])) $hiddenFields = $configHiddenFields['all'];
     if(!empty($configHiddenFields[$modelClass])) $hiddenFields = array_merge($hiddenFields, $configHiddenFields[$modelClass]);
 
-    //displayfield comes first!
-    if(!empty($displayField) && !is_array($displayField) && !empty($schema[$displayField])) {
-        $hiddenFields[] = $displayField;
-        echo "\t<th><?php echo \$this->Paginator->sort('{$displayField}', null, array('model' => '{$modelClass}'));?></th>\n";
+    //displayField comes first!
+    if(!empty($displayField) && !is_array($displayField) && !empty($schema[$displayField]) && array_search($displayField, $hiddenFields) === false) {
+        $displayFieldFromSchema = $schema[$displayField];
+        unset($schema[$displayField]);
+        $schema = array_merge(array($displayField => $displayFieldFromSchema), $schema);
     }
 
     foreach ($schema as $field => $properties) {
         $showField = true;
-
         if(array_search($field, $hiddenFields) === false)
         {
             $suffix = substr($field, -3);
@@ -64,34 +64,6 @@ echo "<?php
 foreach (\${$pluralVar} as \${$singularVar}): ?>\n";
 echo "\t<tr>\n";
     $i = 0;
-
-    //displayfield comes first!
-    if(!empty($displayField) && !is_array($displayField) && !empty($schema[$displayField])) {
-        $field = $displayField;
-        $isKey = false;
-        if (!empty($associations['belongsTo'])) {
-            foreach ($associations['belongsTo'] as $alias => $details) {
-                if ($field === $details['foreignKey']) {
-                    $isKey = true;
-                    $associationControllerName = Inflector::pluralize(Inflector::camelize($details['controller']));
-                    $associationControllerPath = $details['controller'];
-                    echo "\t\t<td>\n\t\t\t<?php echo \$this->Html->link(\${$singularVar}['{$alias}']['{$details['displayField']}'], array('controller' => '{$backendPluginNameUnderscored}_{$associationControllerPath}', 'action' => 'view', \${$singularVar}['{$alias}']['{$details['primaryKey']}'])); ?>\n\t\t</td>\n";
-                    break;
-                }
-            }
-        }
-        if ($isKey !== true) {
-            switch($properties['type'])
-            {
-                case 'datetime':
-                    echo "\t\t<td><?php echo (empty(\${$singularVar}['{$modelClass}']['{$field}']) || '0000-00-00 00:00:00' == \${$singularVar}['{$modelClass}']['{$field}'] || '1970-01-01 01:00:00' == \${$singularVar}['{$modelClass}']['{$field}']) ? '' : \$this->Time->format('d/m/Y', \${$singularVar}['{$modelClass}']['{$field}']); ?>&nbsp;</td>\n";
-                    break;
-                default:
-                    echo "\t\t<td><?php echo h(\${$singularVar}['{$modelClass}']['{$field}']); ?>&nbsp;</td>\n";
-                    break;
-            }
-        }
-    }
 
     foreach ($schema as $field => $properties) {
         $showField = true;
