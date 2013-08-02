@@ -28,10 +28,15 @@ class BacksiteControllerTask extends BakeTask {
 			$controller = $this->_controllerName($model);
 			App::uses($model, 'Model');
 			if (class_exists($model)) {
-				$actions = $this->bakeControllerActions($controller);
-				if(!empty($actions)) {
-					$this->bakeController($controller, $actions);
-				}
+				$modelObj = ClassRegistry::init($model);
+		        if($modelObj->useDbConfig != 'default') {
+		        	$this->out("\n" . 'skipping ' . $model);
+		        } else {
+					$actions = $this->bakeControllerActions($controller);
+					if(!empty($actions)) {
+						$this->bakeController($controller, $actions);
+					}
+		        }
 			}
 		}
 	}
@@ -44,6 +49,7 @@ class BacksiteControllerTask extends BakeTask {
             $this->_stop();
         }
         $modelObj = ClassRegistry::init($currentModelName);
+
         $controllerPath = $this->_controllerPath($controllerName);
         $pluralName = $this->_pluralName($currentModelName);
         $singularName = Inflector::variable($currentModelName);

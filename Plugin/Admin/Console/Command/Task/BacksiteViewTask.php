@@ -32,9 +32,14 @@ class BacksiteViewTask extends BakeTask {
 			$controller = $this->_controllerName($model);
 			App::uses($model, 'Model');
 			if (class_exists($model)) {
-				$vars = $this->_loadController($controller);
-				$actions = $this->_methodsToBake($controller);
-				$this->bakeViewActions($controller, $actions, $vars);
+				$modelObj = ClassRegistry::init($model);
+		        if($modelObj->useDbConfig != 'default') {
+		        	$this->out("\n" . 'skipping ' . $model);
+		        } else {
+		        	$vars = $this->_loadController($controller);
+					$actions = $this->_methodsToBake($controller);
+					$this->bakeViewActions($controller, $actions, $vars);
+		        }
 			}
 		}
     }
@@ -84,6 +89,9 @@ class BacksiteViewTask extends BakeTask {
 			return $this->template;
 		}
 		$themePath = $this->Template->getThemePath();
+		if(in_array($action, array('add', 'edit')) && file_exists($themePath . 'views' . DS . $controllerName . DS . 'form.ctp')) {
+			return array('folder' => 'views' . DS . $controllerName, 'action' => 'form');
+		}
 		if (file_exists($themePath . 'views' . DS . $controllerName . DS . $action . '.ctp')) {
 			return array('folder' => 'views' . DS . $controllerName, 'action' => $action);
 		}

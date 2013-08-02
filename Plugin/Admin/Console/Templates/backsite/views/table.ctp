@@ -51,7 +51,7 @@
         if($showField)
         {
             $i++;
-            echo "\t<th><?php echo \$this->Paginator->sort('{$field}', null, array('model' => '{$modelClass}'));?></th>\n";
+            echo "\t<th><?php echo \$this->Paginator->sort('{$field}', null, array('model' => \${$pluralVar}TableModelAlias));?></th>\n";
         }
 
         if($i > 7) break;
@@ -110,10 +110,10 @@ echo "\t<tr>\n";
                 switch($properties['type'])
                 {
                     case 'datetime':
-                        echo "\t\t<td><?php echo (empty(\${$singularVar}['{$modelClass}']['{$field}']) || '0000-00-00 00:00:00' == \${$singularVar}['{$modelClass}']['{$field}'] || '1970-01-01 01:00:00' == \${$singularVar}['{$modelClass}']['{$field}']) ? '' : \$this->Time->format('d/m/Y', \${$singularVar}['{$modelClass}']['{$field}']); ?>&nbsp;</td>\n";
+                        echo "\t\t<td><?php echo (empty(\${$singularVar}[\${$pluralVar}TableModelAlias]['{$field}']) || '0000-00-00 00:00:00' == \${$singularVar}[\${$pluralVar}TableModelAlias]['{$field}'] || '1970-01-01 01:00:00' == \${$singularVar}[\${$pluralVar}TableModelAlias]['{$field}']) ? '' : \$this->Time->format('d/m/Y', \${$singularVar}[\${$pluralVar}TableModelAlias]['{$field}']); ?>&nbsp;</td>\n";
                         break;
                     default:
-                        echo "\t\t<td><?php echo h(\${$singularVar}['{$modelClass}']['{$field}']); ?>&nbsp;</td>\n";
+                        echo "\t\t<td><?php echo h(\${$singularVar}[\${$pluralVar}TableModelAlias]['{$field}']); ?>&nbsp;</td>\n";
                         break;
                 }
             }
@@ -122,13 +122,13 @@ echo "\t<tr>\n";
     }
 
     echo "\t\t<td class=\"actions\">\n";
-    echo "\t\t\t<?php echo \$this->Html->link(__('View'), array('plugin' => '{$backendPluginNameUnderscored}', 'controller' => '{$backendPluginNameUnderscored}_{$controllerPath}', 'action' => 'view', \${$singularVar}['{$modelClass}']['{$primaryKey}']), array('class' => 'btn btn-info btn-mini')); ?>\n";
+    echo "\t\t\t<?php echo \$this->Html->link(__('View'), array('plugin' => '{$backendPluginNameUnderscored}', 'controller' => '{$backendPluginNameUnderscored}_{$controllerPath}', 'action' => 'view', \${$singularVar}[\${$pluralVar}TableModelAlias]['{$primaryKey}']), array('class' => 'btn btn-info btn-mini')); ?>\n";
 
     $configReadonlyModels = Configure::read('admin.console.models.readonly');
     if(array_search($modelClass, $configReadonlyModels) === false):
 
-    echo "\t\t\t<?php echo \$this->Html->link(__('Edit'), array('plugin' => '{$backendPluginNameUnderscored}', 'controller' => '{$backendPluginNameUnderscored}_{$controllerPath}', 'action' => 'edit', \${$singularVar}['{$modelClass}']['{$primaryKey}']), array('class' => 'btn btn-mini')); ?>\n";
-    echo "\t\t\t<?php echo \$this->Form->postLink(__('Delete'), array('plugin' => '{$backendPluginNameUnderscored}', 'controller' => '{$backendPluginNameUnderscored}_{$controllerPath}', 'action' => 'delete', \${$singularVar}['{$modelClass}']['{$primaryKey}']), array('class' => 'btn btn-danger btn-mini'), __('Are you sure you want to delete # %s?', \${$singularVar}['{$modelClass}']['{$primaryKey}'])); ?>\n";
+    echo "\t\t\t<?php echo \$this->Html->link(__('Edit'), array('plugin' => '{$backendPluginNameUnderscored}', 'controller' => '{$backendPluginNameUnderscored}_{$controllerPath}', 'action' => 'edit', \${$singularVar}[\${$pluralVar}TableModelAlias]['{$primaryKey}']), array('class' => 'btn btn-mini')); ?>\n";
+    echo "\t\t\t<?php echo \$this->Form->postLink(__('Delete'), array('plugin' => '{$backendPluginNameUnderscored}', 'controller' => '{$backendPluginNameUnderscored}_{$controllerPath}', 'action' => 'delete', \${$singularVar}[\${$pluralVar}TableModelAlias]['{$primaryKey}']), array('class' => 'btn btn-danger btn-mini'), __('Are you sure you want to delete # %s?', \${$singularVar}[\${$pluralVar}TableModelAlias]['{$primaryKey}'])); ?>\n";
 
     endif;
     
@@ -142,7 +142,7 @@ echo "<?php endforeach; ?>\n";
 <?php echo "<?php
 echo \$this->Paginator->counter(array(
 'format' => __('Page {:page} of {:pages}, showing {:current} records out of {:count} total, starting on record {:start}, ending on {:end}'),
-'model' => '{$modelClass}'
+'model' => \${$pluralVar}TableModelAlias
 ));
 ?>";?>
 </p>
@@ -151,9 +151,9 @@ echo \$this->Paginator->counter(array(
     <ul>
 <?php
     echo "<?php\n";
-    echo "\t\techo '<li>' . \$this->Paginator->prev('Prev', array('model' => '{$modelClass}'), null, array('class' => 'prev disabled')) . '</li>';\n";
-    echo "\t\techo \$this->Paginator->numbers(array('separator' => '', 'tag' => 'li', 'currentTag' => 'span', 'model' => '{$modelClass}'));\n";
-    echo "\t\techo '<li>' . \$this->Paginator->next('Next', array('model' => '{$modelClass}'), null, array('class' => 'next disabled')) . '</li>';\n";
+    echo "\t\techo '<li>' . \$this->Paginator->prev('Prev', array('model' => \${$pluralVar}TableModelAlias), null, array('class' => 'prev disabled')) . '</li>';\n";
+    echo "\t\techo \$this->Paginator->numbers(array('separator' => '', 'tag' => 'li', 'currentTag' => 'span', 'model' => \${$pluralVar}TableModelAlias));\n";
+    echo "\t\techo '<li>' . \$this->Paginator->next('Next', array('model' => \${$pluralVar}TableModelAlias), null, array('class' => 'next disabled')) . '</li>';\n";
     echo "\t?>\n";
 ?>
     </ul>

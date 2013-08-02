@@ -25,11 +25,11 @@
                             switch($otherModelName)
                             {
                                 default:
-                                    echo "\t\t\$this->paginate = array('conditions' => array('{$currentModelName}.id' => \$id), 'limit' => 15);\n";
+                                    echo "\t\t\$this->paginate = array('conditions' => array('{$otherModelName}.{$relation['foreignKey']}' => \$id), 'limit' => 15);\n";
                                     break;
                             }
                             echo "\t\t\$this->set('{$otherPluralName}', \$this->Paginator->paginate('{$otherModelName}'));\n";
-                            echo "\t\t\$this->set('{$otherPluralName}TableURL', array('controller' => '{$backendPluginNameUnderscored}_{$this->_controllerPath($otherPluralName)}', 'action' => 'index', '{$currentModelName}-id' => \$id));\n";
+                            echo "\t\t\$this->set('{$otherPluralName}TableURL', array('controller' => '{$backendPluginNameUnderscored}_{$this->_controllerPath($this->_pluralName($relation['className']))}', 'action' => 'index', '{$otherModelName}-{$relation['foreignKey']}' => \$id));\n";
                         }
                     endif;
                 endforeach;

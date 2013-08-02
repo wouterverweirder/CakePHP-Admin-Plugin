@@ -1,5 +1,5 @@
 <div class="<?php echo $pluralVar;?> form">
-<?php echo "<?php echo \$this->ExtendedForm->create('{$modelClass}', array('class' => 'form-horizontal'));?>\n";?>
+<?php echo "<?php echo \$this->ExtendedForm->create('{$modelClass}', array('class' => 'form-horizontal', 'novalidate' => 'novalidate'));?>\n";?>
 	<fieldset>
 		<legend><?php printf("<?php echo __('%s %s'); ?>", Inflector::humanize($action), $singularHumanName); ?></legend>
 <?php
