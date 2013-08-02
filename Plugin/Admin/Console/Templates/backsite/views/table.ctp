@@ -122,15 +122,15 @@ echo "\t<tr>\n";
     }
 
     echo "\t\t<td class=\"actions\">\n";
-    echo "\t\t\t<?php echo \$this->Html->link(__('View'), array('plugin' => '{$backendPluginNameUnderscored}', 'controller' => '{$backendPluginNameUnderscored}_{$controllerPath}', 'action' => 'view', \${$singularVar}[\${$pluralVar}TableModelAlias]['{$primaryKey}']), array('class' => 'btn btn-info btn-mini')); ?>\n";
 
-    $configReadonlyModels = Configure::read('admin.console.models.readonly');
-    if(array_search($modelClass, $configReadonlyModels) === false):
+    $actions = array('index', 'view', 'add', 'edit', 'delete');
+    $configDisabledActions = Configure::read('admin.console.models.disabledActions');
+    $configDisabledActions = (!empty($configDisabledActions[$modelClass])) ? $configDisabledActions[$modelClass] : array();
+    $actions = array_diff($actions, $configDisabledActions);
 
-    echo "\t\t\t<?php echo \$this->Html->link(__('Edit'), array('plugin' => '{$backendPluginNameUnderscored}', 'controller' => '{$backendPluginNameUnderscored}_{$controllerPath}', 'action' => 'edit', \${$singularVar}[\${$pluralVar}TableModelAlias]['{$primaryKey}']), array('class' => 'btn btn-mini')); ?>\n";
-    echo "\t\t\t<?php echo \$this->Form->postLink(__('Delete'), array('plugin' => '{$backendPluginNameUnderscored}', 'controller' => '{$backendPluginNameUnderscored}_{$controllerPath}', 'action' => 'delete', \${$singularVar}[\${$pluralVar}TableModelAlias]['{$primaryKey}']), array('class' => 'btn btn-danger btn-mini'), __('Are you sure you want to delete # %s?', \${$singularVar}[\${$pluralVar}TableModelAlias]['{$primaryKey}'])); ?>\n";
-
-    endif;
+    if(array_search('view', $actions) !== false) echo "\t\t\t<?php echo \$this->Html->link(__('View'), array('plugin' => '{$backendPluginNameUnderscored}', 'controller' => '{$backendPluginNameUnderscored}_{$controllerPath}', 'action' => 'view', \${$singularVar}[\${$pluralVar}TableModelAlias]['{$primaryKey}']), array('class' => 'btn btn-info btn-mini')); ?>\n";
+    if(array_search('edit', $actions) !== false) echo "\t\t\t<?php echo \$this->Html->link(__('Edit'), array('plugin' => '{$backendPluginNameUnderscored}', 'controller' => '{$backendPluginNameUnderscored}_{$controllerPath}', 'action' => 'edit', \${$singularVar}[\${$pluralVar}TableModelAlias]['{$primaryKey}']), array('class' => 'btn btn-mini')); ?>\n";
+    if(array_search('delete', $actions) !== false) echo "\t\t\t<?php echo \$this->Form->postLink(__('Delete'), array('plugin' => '{$backendPluginNameUnderscored}', 'controller' => '{$backendPluginNameUnderscored}_{$controllerPath}', 'action' => 'delete', \${$singularVar}[\${$pluralVar}TableModelAlias]['{$primaryKey}']), array('class' => 'btn btn-danger btn-mini'), __('Are you sure you want to delete # %s?', \${$singularVar}[\${$pluralVar}TableModelAlias]['{$primaryKey}'])); ?>\n";
     
     echo "\t\t</td>\n";
 echo "\t</tr>\n";

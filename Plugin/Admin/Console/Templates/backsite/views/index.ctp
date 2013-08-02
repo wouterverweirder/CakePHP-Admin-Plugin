@@ -23,8 +23,11 @@
         </div>
 
 <?php
-$configReadonlyModels = Configure::read('admin.console.models.readonly');
-if(array_search($modelClass, $configReadonlyModels) === false):
+$actions = array('index', 'view', 'add', 'edit', 'delete');
+$configDisabledActions = Configure::read('admin.console.models.disabledActions');
+$configDisabledActions = (!empty($configDisabledActions[$modelClass])) ? $configDisabledActions[$modelClass] : array();
+$actions = array_diff($actions, $configDisabledActions);
+if(array_search('add', $actions) !== false):
 ?>
         <div class="actions">
 

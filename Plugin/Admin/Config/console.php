@@ -1,9 +1,13 @@
 <?php
 
 /**
- * Models which are read only
+ * Specify which actions are disabled for certain models
+ * examples:
+ * 		'ReadOnlyModelName' => array('add', 'edit', 'delete'),
+ *		'InsertAndViewOnlyModelName' => array('edit', 'delete')
  */
-$config['admin.console.models.readonly'] = array('ConfigurationType');
+$config['admin.console.models.disabledActions'] = array(
+);
 
 /**
  * Define searchable fields for the admin overview pages

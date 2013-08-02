@@ -4,12 +4,11 @@
         echo "\n";
     }
 
-    $configReadonlyModels = Configure::read('admin.console.models.readonly');
-    if(array_search($currentModelName, $configReadonlyModels) === false) {
-        $actions = array('index', 'view', 'add', 'edit', 'delete');
-    } else {
-        $actions = array('index', 'view');
-    }
+    $actions = array('index', 'view', 'add', 'edit', 'delete');
+    $configDisabledActions = Configure::read('admin.console.models.disabledActions');
+    $configDisabledActions = (!empty($configDisabledActions[$currentModelName])) ? $configDisabledActions[$currentModelName] : array();
+    $actions = array_diff($actions, $configDisabledActions);
+    
     foreach ($actions as $action) {
         $compact = array();
         if(file_exists(__DIR__ . DIRECTORY_SEPARATOR . $controllerName . DIRECTORY_SEPARATOR . $action . '.ctp')) {
