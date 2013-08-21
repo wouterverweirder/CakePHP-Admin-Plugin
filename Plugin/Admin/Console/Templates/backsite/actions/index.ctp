@@ -35,7 +35,8 @@
         }
 
 		$this-><?php echo $currentModelName ?>->recursive = 0;
-		$this->set('<?php echo $pluralName ?>', $this->Paginator->paginate('<?php echo $currentModelName ?>', $conditions, array()));
+		$this->paginate = array('conditions' => $conditions, 'limit' => 15);
+        $this->set('<?php echo $pluralName ?>', $this->Paginator->paginate('<?php echo $currentModelName ?>'));
 		$this->set('<?php echo $pluralName ?>TableURL', $<?php echo $pluralName ?>TableURL);
         $this->set('<?php echo $pluralName ?>TableModelAlias', '<?php echo $currentModelName ?>');
 		//render as local table if it is an ajax request
