@@ -38,7 +38,7 @@ class ToStringBehavior extends ModelBehavior {
         return $query;
     }
 
-    public function afterFind(Model $model, $results, $primary) {
+    public function afterFind(Model $model, $results, $primary = false) {
         $numResults = sizeof($results);
         if($primary) {
 
