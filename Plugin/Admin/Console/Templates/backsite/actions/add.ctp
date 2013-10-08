@@ -18,6 +18,11 @@
             }
         }
 <?php
+	if($modelObj->Behaviors->loaded('Tree')) {
+		$otherPluralName = $this->_pluralName('Parent' . $currentModelName);
+		echo "\t\t\${$otherPluralName} = \$this->{$currentModelName}->generateTreeList(null, '{n}.{$currentModelName}.id', '{n}.{$currentModelName}.' . \$this->{$currentModelName}->displayField, ' - ', 0);\n";
+		$compact[] = "'{$otherPluralName}'";
+	}
 	foreach (array('belongsTo', 'hasAndBelongsToMany') as $assoc):
 		foreach ($modelObj->{$assoc} as $associationName => $relation):
 			if (!empty($associationName)):
@@ -25,14 +30,10 @@
 				$otherPluralName = $this->_pluralName($associationName);
                 $otherModelObj = ClassRegistry::init($otherModelName);
 
-                if($otherModelName == 'Parent' . $currentModelName) {
-                    echo "\t\t\${$otherPluralName} = \$this->{$currentModelName}->generateTreeList(null, '{n}.{$currentModelName}.id', '{n}.{$currentModelName}.' . \$this->{$currentModelName}->displayField, ' - ', 0);\n";
+                if($otherModelObj->Behaviors->loaded('Tree')) {
+                    echo "\t\t\${$otherPluralName} = \$this->{$currentModelName}->{$otherModelName}->generateTreeList(null, '{n}.{$otherModelName}.id', '{n}.{$otherModelName}.' . \$this->{$currentModelName}->{$otherModelName}->displayField, ' - ', 0);\n";
                 } else {
-                    if(!empty($otherModelObj->actsAs) && (array_search('Tree', $otherModelObj->actsAs) !== false)) {
-                        echo "\t\t\${$otherPluralName} = \$this->{$currentModelName}->{$otherModelName}->generateTreeList(null, '{n}.{$otherModelName}.id', '{n}.{$otherModelName}.' . \$this->{$currentModelName}->{$otherModelName}->displayField, ' - ', 0);\n";
-                    } else {
-                        echo "\t\t\${$otherPluralName} = \$this->{$currentModelName}->{$otherModelName}->find('list', array('order' => \$this->{$currentModelName}->{$otherModelName}->displayField));\n";
-                    }
+                    echo "\t\t\${$otherPluralName} = \$this->{$currentModelName}->{$otherModelName}->find('list', array('order' => \$this->{$currentModelName}->{$otherModelName}->displayField));\n";
                 }
 
 				$compact[] = "'{$otherPluralName}'";
