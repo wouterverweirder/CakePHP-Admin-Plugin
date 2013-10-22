@@ -15,18 +15,35 @@ Some of the features are:
 ## Installation
 
 1. Put the contents of the Plugin folder into the `app/Plugin` folder of your cakephp project.
-2. Put the contents of the webroot folder into the `app/webroot` folder of your cakephp project.
-3. Load the plugin by adding this line at the bottom of your `app/Config/bootstrap.php`:
+2. Put the contents of the Model folder into the `app/Model` folder of your cakephp project.
+3. Put the contents of the webroot folder into the `app/webroot` folder of your cakephp project.
+4. Load the plugin by adding this line at the bottom of your `app/Config/bootstrap.php`:
     
     	CakePlugin::load('Admin', array('bootstrap' => true, 'routes' => true));
 
-4. Add the toString behaviour to your `app/Model/AppModel.php`
+5. Add the toString behaviour and the equaltofield validation rule to your `app/Model/AppModel.php`
 
 		class AppModel extends Model {
 			public $actsAs = array('Admin.ToString');
+			/**
+		     * validation rule to compare two fields
+		     * used for password validation in create/update forms
+		     * @param $check
+		     * @param $otherfield
+		     * @return bool
+		     */
+		    public function equaltofield($check, $otherfield) {
+		        //get name of field
+		        $fname = '';
+		        foreach ($check as $key => $value){
+		            $fname = $key;
+		            break;
+		        }
+		        return $this->data[$this->name][$otherfield] === $this->data[$this->name][$fname];
+		    }
 
-5. Go to http://localhost/yourproject/admin/users/add and add the first admin user
-6. Remove the auth allow lines from the AdminAppController beforeFilter() method to activate the authentication:
+6. Go to http://localhost/yourproject/admin/users/add and add the first admin user
+7. Remove the auth allow lines from the AdminAppController beforeFilter() method to activate the authentication:
 
 		public function beforeFilter() {
         	//TODO: remove after you created the first user
