@@ -10,6 +10,7 @@ class BacksiteShell extends Shell {
 		}
 		$this->tasks[] = $this->plugin . '.BacksiteController';
 		$this->tasks[] = $this->plugin . '.BacksiteView';
+		parent::initialize();
 	}
 
 	public function main() {

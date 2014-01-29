@@ -11,6 +11,7 @@ class BacksiteControllerTask extends BakeTask {
 	public function initialize() {
 		$this->_backendPluginName = basename(dirname(dirname(dirname(dirname(__FILE__)))));
 		$this->path = App::pluginPath($this->_backendPluginName) . 'Controller' . DS;
+		parent::initialize();
 	}
 
 	public function execute() {
