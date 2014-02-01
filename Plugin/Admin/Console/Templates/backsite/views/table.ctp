@@ -39,7 +39,9 @@
             switch($properties['type'])
             {
                 case 'text':
-                    $showField = false;
+                    if($field != $displayField) {
+                        $showField = false;
+                    }
                     break;
             }
         }
@@ -82,7 +84,9 @@ echo "\t<tr>\n";
             switch($properties['type'])
             {
                 case 'text':
-                    $showField = false;
+                    if($field != $displayField) {
+                        $showField = false;
+                    }
                     break;
             }
         }
