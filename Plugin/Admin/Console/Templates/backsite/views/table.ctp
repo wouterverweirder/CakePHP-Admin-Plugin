@@ -23,40 +23,53 @@
         $schema = array_merge(array($displayField => $displayFieldFromSchema), $schema);
     }
 
-    foreach ($schema as $field => $properties) {
-        $showField = true;
-        if(array_search($field, $hiddenFields) === false)
-        {
-            $suffix = substr($field, -3);
-            if(!($suffix === false))
+    $schemaForTable = array();
+
+    $configExplicitFields = Configure::read('admin.console.views.table.explicit_fields');
+    if(!empty($configExplicitFields) && !empty($configExplicitFields[$modelClass])) {
+        foreach ($configExplicitFields[$modelClass] as $field) {
+            $schemaForTable[$field] = $schema[$field];
+        }
+    } else {
+        foreach ($schema as $field => $properties) {
+            $showField = true;
+            if(array_search($field, $hiddenFields) === false)
             {
-                $pos = strpos($suffix, '_');
-                if(!($pos === false) && $pos == 0 && $suffix != '_id')
+                $suffix = substr($field, -3);
+                if(!($suffix === false))
                 {
-                    $showField = false;
-                }
-            }
-            switch($properties['type'])
-            {
-                case 'text':
-                    if($field != $displayField) {
+                    $pos = strpos($suffix, '_');
+                    if(!($pos === false) && $pos == 0 && $suffix != '_id')
+                    {
                         $showField = false;
                     }
-                    break;
+                }
+                switch($properties['type'])
+                {
+                    case 'text':
+                        if($field != $displayField) {
+                            $showField = false;
+                        }
+                        break;
+                }
             }
-        }
-        else
-        {
-            $showField = false;
-        }
+            else
+            {
+                $showField = false;
+            }
 
-        if($showField)
-        {
-            $i++;
-            echo "\t<th><?php echo \$this->Paginator->sort('{$field}', null, array('model' => \${$pluralVar}TableModelAlias));?></th>\n";
-        }
+            if($showField)
+            {
+                $schemaForTable[$field] = $properties;
+                $i++;
+            }
 
-        if($i > 7) break;
+            if($i > 7) break;
+        }
+    }
+
+    foreach($schemaForTable as $field => $properties) {
+        echo "\t<th><?php echo \$this->Paginator->sort('{$field}', null, array('model' => \${$pluralVar}TableModelAlias));?></th>\n";
     }
 ?>
     <th class="actions"><?php echo "<?php echo __('Actions');?>";?></th>
@@ -67,62 +80,31 @@ foreach (\${$pluralVar} as \${$singularVar}): ?>\n";
 echo "\t<tr>\n";
     $i = 0;
 
-    foreach ($schema as $field => $properties) {
-        $showField = true;
-
-        if(array_search($field, $hiddenFields) === false)
-        {
-            $suffix = substr($field, -3);
-            if(!($suffix === false))
-            {
-                $pos = strpos($suffix, '_');
-                if(!($pos === false) && $pos == 0 && $suffix != '_id')
-                {
-                    $showField = false;
+    foreach ($schemaForTable as $field => $properties) {
+        $i++;
+        $isKey = false;
+        if (!empty($associations['belongsTo'])) {
+            foreach ($associations['belongsTo'] as $alias => $details) {
+                if ($field === $details['foreignKey']) {
+                    $isKey = true;
+                    $associationControllerName = Inflector::pluralize(Inflector::camelize($details['controller']));
+                    $associationControllerPath = $details['controller'];
+                    echo "\t\t<td>\n\t\t\t<?php echo \$this->Html->link(\${$singularVar}['{$alias}']['toString'], array('controller' => '{$backendPluginNameUnderscored}_{$associationControllerPath}', 'action' => 'view', \${$singularVar}['{$alias}']['{$details['primaryKey']}'])); ?>\n\t\t</td>\n";
+                    break;
                 }
             }
+        }
+        if ($isKey !== true) {
             switch($properties['type'])
             {
-                case 'text':
-                    if($field != $displayField) {
-                        $showField = false;
-                    }
+                case 'datetime':
+                    echo "\t\t<td><?php echo (empty(\${$singularVar}[\${$pluralVar}TableModelAlias]['{$field}']) || '0000-00-00 00:00:00' == \${$singularVar}[\${$pluralVar}TableModelAlias]['{$field}'] || '1970-01-01 01:00:00' == \${$singularVar}[\${$pluralVar}TableModelAlias]['{$field}']) ? '' : \$this->Time->format('d/m/Y', \${$singularVar}[\${$pluralVar}TableModelAlias]['{$field}']); ?>&nbsp;</td>\n";
+                    break;
+                default:
+                    echo "\t\t<td><?php echo h(\${$singularVar}[\${$pluralVar}TableModelAlias]['{$field}']); ?>&nbsp;</td>\n";
                     break;
             }
         }
-        else
-        {
-            $showField = false;
-        }
-
-        if($showField)
-        {
-            $i++;
-            $isKey = false;
-            if (!empty($associations['belongsTo'])) {
-                foreach ($associations['belongsTo'] as $alias => $details) {
-                    if ($field === $details['foreignKey']) {
-                        $isKey = true;
-                        $associationControllerName = Inflector::pluralize(Inflector::camelize($details['controller']));
-                        $associationControllerPath = $details['controller'];
-                        echo "\t\t<td>\n\t\t\t<?php echo \$this->Html->link(\${$singularVar}['{$alias}']['toString'], array('controller' => '{$backendPluginNameUnderscored}_{$associationControllerPath}', 'action' => 'view', \${$singularVar}['{$alias}']['{$details['primaryKey']}'])); ?>\n\t\t</td>\n";
-                        break;
-                    }
-                }
-            }
-            if ($isKey !== true) {
-                switch($properties['type'])
-                {
-                    case 'datetime':
-                        echo "\t\t<td><?php echo (empty(\${$singularVar}[\${$pluralVar}TableModelAlias]['{$field}']) || '0000-00-00 00:00:00' == \${$singularVar}[\${$pluralVar}TableModelAlias]['{$field}'] || '1970-01-01 01:00:00' == \${$singularVar}[\${$pluralVar}TableModelAlias]['{$field}']) ? '' : \$this->Time->format('d/m/Y', \${$singularVar}[\${$pluralVar}TableModelAlias]['{$field}']); ?>&nbsp;</td>\n";
-                        break;
-                    default:
-                        echo "\t\t<td><?php echo h(\${$singularVar}[\${$pluralVar}TableModelAlias]['{$field}']); ?>&nbsp;</td>\n";
-                        break;
-                }
-            }
-        }
-        if($i > 7) break;
     }
 
     echo "\t\t<td class=\"actions\">\n";

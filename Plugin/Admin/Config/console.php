@@ -65,6 +65,13 @@ $config['admin.console.views.table.hidden_fields'] = array(
 );
 
 /**
+ * Override visible fields for overview tables and show these ones
+ * Use the model name as key, value is an array of fieldnames to show
+ */
+$config['admin.console.views.table.explicit_fields'] = array(
+);
+
+/**
  * Fields we won't show in the detail pages
  */
 $config['admin.console.views.view.hidden_fields'] = array(
