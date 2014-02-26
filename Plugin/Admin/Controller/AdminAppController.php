@@ -4,6 +4,7 @@ class AdminAppController extends AppController {
 
     public $backendPluginName = null;
     public $backendPluginNameUnderscored = null;
+    public $redirectUrl = null;
 
 	public $helpers = array('Form', 'Html', 'Js', 'Session', 'Time');
 	public $components = array(
@@ -36,10 +37,22 @@ class AdminAppController extends AppController {
         $this->Auth->loginAction = array('controller' => $this->backendPluginNameUnderscored . '_users', 'action' => 'login', 'plugin' => $this->backendPluginNameUnderscored);
         $this->Auth->logoutRedirect = array('controller' => 'pages', 'action' => 'display', 'home', 'plugin' => false);
         $this->Auth->loginRedirect = array('controller' => $this->backendPluginNameUnderscored . '_pages', 'action' => 'display', 'home', 'plugin' => Inflector::underscore($this->backendPluginName));
+        if(!empty($this->request->query['redirect'])) {
+            if(!empty($this->request->base) && strpos($this->request->query['redirect'], $this->request->base) === 0) {
+                $this->request->query['redirect'] = substr($this->request->query['redirect'], strlen($this->request->base));
+            }
+            $this->redirectUrl = $this->request->query['redirect'];
+        } else {
+            if($this->request->action == 'index' && !$this->request->is('ajax')) {
+                $this->redirectUrl = '/' . $this->request->url;
+            } else {
+                $this->redirectUrl = $this->referer(array('action' => 'index'), true);
+            }
+        }
 	}
 
 	public function beforeRender() {
-		$this->set('cancelUrl', $this->referer());
+		$this->set('redirectUrl', $this->redirectUrl);
 	}
 
 	public function isAuthorized($user = null) {

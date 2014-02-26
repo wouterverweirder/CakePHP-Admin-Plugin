@@ -61,6 +61,6 @@
 ?>
 	</fieldset>
 <?php
-    echo "<?php echo \$this->ExtendedForm->end(array('label' => __('Save {$modelClass}'), 'class' => 'btn btn-primary', 'div' => false, 'before' => '<div class=\"control-group\"><div class=\"controls\">', 'after' => \"\\n\" . \$this->Html->link(__('Cancel'), \$cancelUrl, array('class' => 'btn')) . '</div></div>'));?>\n";
+    echo "<?php echo \$this->ExtendedForm->end(array('label' => __('Save {$modelClass}'), 'class' => 'btn btn-primary', 'div' => false, 'before' => '<div class=\"control-group\"><div class=\"controls\">', 'after' => \"\\n\" . \$this->Html->link(__('Cancel'), \$redirectUrl, array('class' => 'btn')) . '</div></div>'));?>\n";
 ?>
 </div>
