@@ -138,6 +138,11 @@ foreach ($associations['hasMany'] as $alias => $details):
     $otherPluralVar = Inflector::pluralize($otherSingularVar);
     $otherControllerName = Inflector::pluralize(Inflector::camelize($details['controller']));
     $otherControllerPath = $details['controller'];
+
+    $actions = array('index', 'view', 'add', 'edit', 'delete');
+    $configDisabledActions = Configure::read('admin.console.models.disabledActions');
+    $configDisabledActions = (!empty($configDisabledActions[$alias])) ? $configDisabledActions[$alias] : array();
+    $actions = array_diff($actions, $configDisabledActions);
         ?>
     <div id="tabs-<?php echo ++$tabnr; ?>" class="tab-pane">
         <div class="related">
@@ -146,7 +151,7 @@ foreach ($associations['hasMany'] as $alias => $details):
             <?php echo "<?php echo \$this->element('../{$backendPluginName}{$otherControllerName}/table', array('{$otherPluralVar}TableURL' => \${$aliasPluralVar}TableURL, '{$otherPluralVar}' => \${$aliasPluralVar}, '{$otherPluralVar}TableModelAlias' => '{$alias}'));?>\n"; ?>
             </div>
             <div class="actions">
-                <?php echo "<?php echo \$this->Html->link(__('New " . Inflector::humanize(Inflector::underscore($alias)) . "'), array('plugin' => '{$backendPluginNameUnderscored}', 'controller' => '{$backendPluginNameUnderscored}_{$otherControllerPath}', 'action' => 'add', '{$details['foreignKey']}' => \${$singularVar}['{$modelClass}']['{$primaryKey}']), array('class' => 'btn btn-primary'));?>";?> </li>
+                <?php if(array_search('add', $actions) !== false) echo "<?php echo \$this->Html->link(__('New " . Inflector::humanize(Inflector::underscore($alias)) . "'), array('plugin' => '{$backendPluginNameUnderscored}', 'controller' => '{$backendPluginNameUnderscored}_{$otherControllerPath}', 'action' => 'add', '{$details['foreignKey']}' => \${$singularVar}['{$modelClass}']['{$primaryKey}']), array('class' => 'btn btn-primary'));?>";?> </li>
             </div>
         </div>
     </div>
