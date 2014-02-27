@@ -86,7 +86,7 @@
                     $actions = array_diff($actions, $configDisabledActions);
 
                     if(array_search('edit', $actions) !== false) echo "\t\t\t\t<li><?php echo \$this->Html->link(__('Edit " . $singularHumanName ."'), array('action' => 'edit', \${$singularVar}['{$modelClass}']['{$primaryKey}'])); ?> </li>\n";
-                    if(array_search('delete', $actions) !== false) echo "\t\t\t\t<li><?php echo \$this->Form->postLink(__('Delete " . $singularHumanName . "'), array('action' => 'delete', \${$singularVar}['{$modelClass}']['{$primaryKey}']), null, __('Are you sure you want to delete # %s?', \${$singularVar}['{$modelClass}']['{$primaryKey}'])); ?> </li>\n";
+                    if(array_search('delete', $actions) !== false) echo "\t\t\t\t<li><?php echo \$this->Form->postLink(__('Delete " . $singularHumanName . "'), array('action' => 'delete', \${$singularVar}['{$modelClass}']['{$primaryKey}'], '?' => array('redirect' => \$this->Html->url(array('action' => 'index')))), null, __('Are you sure you want to delete # %s?', \${$singularVar}['{$modelClass}']['{$primaryKey}'])); ?> </li>\n";
                     if(array_search('add', $actions) !== false) echo "\t\t\t\t<li><?php echo \$this->Html->link(__('New " . $singularHumanName . "'), array('action' => 'add')); ?> </li>\n";
                     if(array_search('index', $actions) !== false) echo "\t\t\t\t<li><?php echo \$this->Html->link(__('List " . $pluralHumanName . "'), array('action' => 'index')); ?> </li>\n";
                 ?>
@@ -147,11 +147,11 @@ foreach ($associations['hasMany'] as $alias => $details):
     <div id="tabs-<?php echo ++$tabnr; ?>" class="tab-pane">
         <div class="related">
             <h3><?php echo "<?php echo __('Related " . $aliasPluralHumanName . "');?>";?></h3>
-            <div class="<?php echo $aliasPluralVar;?> table">
-            <?php echo "<?php echo \$this->element('../{$backendPluginName}{$otherControllerName}/table', array('{$otherPluralVar}TableURL' => \${$aliasPluralVar}TableURL, '{$otherPluralVar}' => \${$aliasPluralVar}, '{$otherPluralVar}TableModelAlias' => '{$alias}'));?>\n"; ?>
+            <div class="<?php echo $otherPluralVar;?> table">
+            <?php echo "<?php echo \$this->element('../{$backendPluginName}{$otherControllerName}/table', array('{$otherPluralVar}TableURL' => \${$otherPluralVar}TableURL, '{$otherPluralVar}' => \${$otherPluralVar}, '{$otherPluralVar}TableModelAlias' => '{$alias}', 'redirectUrl' => '/' . \$this->request->url . '#tabs-' . $tabnr));?>\n"; ?>
             </div>
             <div class="actions">
-                <?php if(array_search('add', $actions) !== false) echo "<?php echo \$this->Html->link(__('New " . Inflector::humanize(Inflector::underscore($alias)) . "'), array('plugin' => '{$backendPluginNameUnderscored}', 'controller' => '{$backendPluginNameUnderscored}_{$otherControllerPath}', 'action' => 'add', '{$details['foreignKey']}' => \${$singularVar}['{$modelClass}']['{$primaryKey}']), array('class' => 'btn btn-primary'));?>";?> </li>
+                <?php echo "<?php echo \$this->Html->link(__('New " . $otherSingularHumanName . "'), array('plugin' => '{$backendPluginNameUnderscored}', 'controller' => '{$backendPluginNameUnderscored}_{$otherControllerPath}', 'action' => 'add', '{$details['foreignKey']}' => \${$singularVar}['{$modelClass}']['{$primaryKey}'], '?' => array('redirect' => '/' . \$this->request->url . '#tabs-' . $tabnr)), array('class' => 'btn btn-primary'));?>";?> </li>
             </div>
         </div>
     </div>
@@ -208,3 +208,12 @@ foreach ($associations['hasAndBelongsToMany'] as $alias => $details):
     </div>
 <?php endforeach;?>
 </div>
+<script type="text/javascript">
+(function(){
+    var $tab = $('.nav.nav-tabs li a[href=' + window.location.hash + ']:first');
+    if($tab.length == 0) {
+        $tab = $('.nav.nav-tabs li a:first');
+    }
+    $tab.tab('show');
+})();
+</script>

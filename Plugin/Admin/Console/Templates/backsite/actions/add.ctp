@@ -3,7 +3,11 @@
 			$this-><?php echo $currentModelName; ?>->create();
 			if ($this-><?php echo $currentModelName; ?>->save($this->request->data)) {
 				$this->Session->setFlash(__('The <?php echo strtolower($singularHumanName); ?> has been saved'), 'default', array(), 'good');
-                $this->redirect(array('action' => 'view', $this-><?php echo $currentModelName; ?>->id));
+                if(!empty($this->request->query['redirect'])) {
+					$this->redirect($this->redirectUrl);
+				} else {
+					$this->redirect(array('action' => 'view', $this-><?php echo $currentModelName; ?>->id));
+				}
 			} else {
 				$this->Session->setFlash(__('The <?php echo strtolower($singularHumanName); ?> could not be saved. Please, try again.'), 'default', array(), 'bad');
 			}

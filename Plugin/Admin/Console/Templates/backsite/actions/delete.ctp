@@ -8,7 +8,7 @@
 		}
 		if ($this-><?php echo $currentModelName; ?>->delete()) {
 			$this->Session->setFlash(__('<?php echo ucfirst(strtolower($singularHumanName)); ?> deleted'), 'default', array(), 'good');
-            $this->redirect(array('action' => 'index'));
+            $this->redirect($this->redirectUrl);
 		}
 		$this->Session->setFlash(__('<?php echo ucfirst(strtolower($singularHumanName)); ?> was not deleted'), 'default', array(), 'bad');
 		$this->redirect(array('action' => 'index'));
