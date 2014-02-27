@@ -130,14 +130,17 @@ if(empty($associations['hasMany'])) $associations['hasMany'] = array();
 
 foreach ($associations['hasMany'] as $alias => $details):
 
-    $aliasSingularVar = Inflector::variable($alias);
-    $aliasPluralVar = Inflector::pluralize($aliasSingularVar);
-    $aliasPluralHumanName = Inflector::humanize(Inflector::pluralize(Inflector::underscore($aliasSingularVar)));
-
     $otherSingularVar = Inflector::variable(Inflector::singularize($details['controller']));
     $otherPluralVar = Inflector::pluralize($otherSingularVar);
     $otherControllerName = Inflector::pluralize(Inflector::camelize($details['controller']));
     $otherControllerPath = $details['controller'];
+
+    $otherSingularHumanName = Inflector::humanize(Inflector::underscore($alias));
+    $otherPluralHumanName = Inflector::humanize(Inflector::underscore(Inflector::pluralize($alias)));
+    if(!empty($configAliases[$alias])) {
+        $otherSingularHumanName = Inflector::humanize(Inflector::underscore($configAliases[$alias]));
+        $otherPluralHumanName = Inflector::humanize(Inflector::underscore(Inflector::pluralize($configAliases[$alias])));
+    }
 
     $actions = array('index', 'view', 'add', 'edit', 'delete');
     $configDisabledActions = Configure::read('admin.console.models.disabledActions');
@@ -146,12 +149,12 @@ foreach ($associations['hasMany'] as $alias => $details):
         ?>
     <div id="tabs-<?php echo ++$tabnr; ?>" class="tab-pane">
         <div class="related">
-            <h3><?php echo "<?php echo __('Related " . $aliasPluralHumanName . "');?>";?></h3>
+            <h3><?php echo "<?php echo __('" . $otherPluralHumanName . "');?>";?></h3>
             <div class="<?php echo $otherPluralVar;?> table">
             <?php echo "<?php echo \$this->element('../{$backendPluginName}{$otherControllerName}/table', array('{$otherPluralVar}TableURL' => \${$otherPluralVar}TableURL, '{$otherPluralVar}' => \${$otherPluralVar}, '{$otherPluralVar}TableModelAlias' => '{$alias}', 'redirectUrl' => '/' . \$this->request->url . '#tabs-' . $tabnr));?>\n"; ?>
             </div>
             <div class="actions">
-                <?php echo "<?php echo \$this->Html->link(__('New " . $otherSingularHumanName . "'), array('plugin' => '{$backendPluginNameUnderscored}', 'controller' => '{$backendPluginNameUnderscored}_{$otherControllerPath}', 'action' => 'add', '{$details['foreignKey']}' => \${$singularVar}['{$modelClass}']['{$primaryKey}'], '?' => array('redirect' => '/' . \$this->request->url . '#tabs-' . $tabnr)), array('class' => 'btn btn-primary'));?>";?> </li>
+                <?php if(array_search('add', $actions) !== false) echo "<?php echo \$this->Html->link(__('New " . $otherSingularHumanName . "'), array('plugin' => '{$backendPluginNameUnderscored}', 'controller' => '{$backendPluginNameUnderscored}_{$otherControllerPath}', 'action' => 'add', '{$details['foreignKey']}' => \${$singularVar}['{$modelClass}']['{$primaryKey}'], '?' => array('redirect' => '/' . \$this->request->url . '#tabs-' . $tabnr)), array('class' => 'btn btn-primary'));?>";?> </li>
             </div>
         </div>
     </div>
