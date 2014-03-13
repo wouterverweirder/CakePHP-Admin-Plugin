@@ -38,21 +38,51 @@
                 $str .= "\t\tif(isset(\$this->request->params['named']['{$field}'])) echo '<div style=\"display: none;\">';\n";
                 switch($explicitFieldType) {
                     case 'parent_id':
-                        $str .= "\t\techo \$this->ExtendedForm->input('{$field}', array_merge(array('type' => 'select', 'label' => __('Parent " . Inflector::humanize(Inflector::underscore($modelClass)) . "'), 'options' => \$parent" . Inflector::pluralize($modelClass) . "), " . var_export($explicitFieldOptions, true) . "));\n";
+                        $str .= "\t\techo \$this->ExtendedForm->input('{$field}', array_merge(array('type' => 'select', 'label' => __('Parent " . Inflector::humanize(Inflector::underscore($modelClass)) . "'), 'options' => \$parent" . Inflector::pluralize($modelClass) . ")";
+                        if(!empty($explicitFieldOptions)) {
+                            $str .= ", " . var_export($explicitFieldOptions, true);
+                        }
+                        $str .= "));\n";
                         break;
                     case 'password':
                         if(strpos($action, 'add') !== false) {
-                            $str .= "\t\techo \$this->ExtendedForm->input('{$field}', array_merge(array('type' => 'password', 'label' => __('" . Inflector::humanize(Inflector::underscore($field)) . "')), " . var_export($explicitFieldOptions, true) . "));\n";
+                            $str .= "\t\techo \$this->ExtendedForm->input('{$field}', array_merge(array('type' => 'password', 'label' => __('" . Inflector::humanize(Inflector::underscore($field)) . "'))";
+                            if(!empty($explicitFieldOptions)) {
+                                $str .= ", " . var_export($explicitFieldOptions, true);
+                            }
+                            $str .= "));\n";
                         } else {
-                            $str .= "\t\techo \$this->ExtendedForm->input('new_{$field}', array_merge(array('type' => 'password', 'label' => __('New " . Inflector::humanize(Inflector::underscore($field)) . "')), " . var_export($explicitFieldOptions, true) . "));\n";
+                            $str .= "\t\techo \$this->ExtendedForm->input('new_{$field}', array_merge(array('type' => 'password', 'label' => __('New " . Inflector::humanize(Inflector::underscore($field)) . "'))";
+                            if(!empty($explicitFieldOptions)) {
+                                $str .= ", " . var_export($explicitFieldOptions, true);
+                            }
+                            $str .= "));\n";
                         }
-                        $str .= "\t\techo \$this->ExtendedForm->input('confirm_{$field}', array_merge(array('type' => 'password', 'label' => __('Confirm " . Inflector::humanize(Inflector::underscore($field)) . "')), " . var_export($explicitFieldOptions, true) . "));\n";
+                        $str .= "\t\techo \$this->ExtendedForm->input('confirm_{$field}', array_merge(array('type' => 'password', 'label' => __('Confirm " . Inflector::humanize(Inflector::underscore($field)) . "'))";
+                        if(!empty($explicitFieldOptions)) {
+                            $str .= ", " . var_export($explicitFieldOptions, true);
+                        }
+                        $str .= "));\n";
                         break;
                     case '':
-                        $str .= "\t\techo \$this->ExtendedForm->input('{$field}', array_merge(array('label' => __('" . Inflector::humanize(Inflector::underscore(preg_replace('/_id$/', '', $field))) . "')), " . var_export($explicitFieldOptions, true) . "));\n";
+                        $str .= "\t\techo \$this->ExtendedForm->input('{$field}', array_merge(array('label' => __('" . Inflector::humanize(Inflector::underscore(preg_replace('/_id$/', '', $field))) . "'))";
+                        if(!empty($explicitFieldOptions)) {
+                            $str .= ", " . var_export($explicitFieldOptions, true);
+                        }
+                        if (preg_match('/_id$/', $field)) {
+                            $str .= ", array('options' => \$" . Inflector::pluralize(Inflector::variable(str_replace('_id', '', $field))) . Select . ")";
+                        }
+                        $str .= "));\n";
                         break;
                     default:
-                        $str .= "\t\techo \$this->ExtendedForm->input('{$field}', array_merge(array('type' => '{$explicitFieldType}', 'label' => __('" . Inflector::humanize(Inflector::underscore($field)) . "')), " . var_export($explicitFieldOptions, true) . "));\n";
+                        $str .= "\t\techo \$this->ExtendedForm->input('{$field}', array_merge(array('type' => '{$explicitFieldType}', 'label' => __('" . Inflector::humanize(Inflector::underscore($field)) . "'))";
+                        if(!empty($explicitFieldOptions)) {
+                            $str .= ", " . var_export($explicitFieldOptions, true);
+                        }
+                        if (preg_match('/_id$/', $field)) {
+                            $str .= ", array('options' => \$" . Inflector::pluralize(Inflector::variable(str_replace('_id', '', $field))) . Select . ")";
+                        }
+                        $str .= "));\n";
                         break;
                 }
                 $str .= "\t\tif(isset(\$this->request->params['named']['{$field}'])) echo '</div>';\n";
