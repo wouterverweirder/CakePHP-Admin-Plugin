@@ -18,6 +18,13 @@
                 if(!empty($columnType)) {
                     if(empty($this->request->data['<?php echo $currentModelName; ?>'])) $this->request->data['<?php echo $currentModelName; ?>'] = array();
                     $this->request->data['<?php echo $currentModelName; ?>'][$param] = $value;
+                    //is this a reference to a related object?
+                    foreach ($this-><?php echo $currentModelName; ?>->belongsTo as $relationName => $relationInfo) {
+                    	if($relationInfo['foreignKey'] == $param) {
+                    		$relatedRecord = $this-><?php echo $currentModelName; ?>->$relationInfo['className']->find('first', array('conditions' => array($relationInfo['className'] . '.id' => $value), 'recursive' => 0));
+                    		$this->set(Inflector::variable($relationInfo['className']), $relatedRecord);
+                    	}
+                    }
                 }
             }
         }
