@@ -89,7 +89,18 @@ echo "\t<tr>\n";
                     $isKey = true;
                     $associationControllerName = Inflector::pluralize(Inflector::camelize($details['controller']));
                     $associationControllerPath = $details['controller'];
-                    echo "\t\t<td>\n\t\t\t<?php echo \$this->Html->link(\${$singularVar}['{$alias}']['toString'], array('controller' => '{$backendPluginNameUnderscored}_{$associationControllerPath}', 'action' => 'view', \${$singularVar}['{$alias}']['{$details['primaryKey']}'])); ?>\n\t\t</td>\n";
+
+                    $actions = array('index', 'view', 'add', 'edit', 'delete');
+                    $configDisabledActions = Configure::read('admin.console.models.disabledActions');
+                    $configDisabledActions = (!empty($configDisabledActions[$details['className']])) ? $configDisabledActions[$details['className']] : array();
+                    $actions = array_diff($actions, $configDisabledActions);
+
+                    if(array_search('view', $actions) !== false){
+                        echo "\t\t<td>\n\t\t\t<?php echo \$this->Html->link(\${$singularVar}['{$alias}']['toString'], array('controller' => '{$backendPluginNameUnderscored}_{$associationControllerPath}', 'action' => 'view', \${$singularVar}['{$alias}']['{$details['primaryKey']}'])); ?>\n\t\t</td>\n";
+                    } 
+                    else{
+                        echo "\t\t<td>\n\t\t\t<?php echo \${$singularVar}['{$alias}']['toString']; ?>\n\t\t</td>\n";
+                    } 
                     break;
                 }
             }

@@ -46,7 +46,17 @@
                                         $associationControllerName = Inflector::pluralize(Inflector::camelize($details['controller']));
                                         $associationControllerPath = $details['controller'];
                                         echo "\t\t\t\t<dt><?php echo __('" . Inflector::humanize(Inflector::underscore($alias)) . "'); ?></dt>\n";
-                                        echo "\t\t<dd>\n\t\t\t<?php echo \$this->Html->link(\${$singularVar}['{$alias}']['toString'], array('plugin' => '{$backendPluginNameUnderscored}', 'controller' => '{$backendPluginNameUnderscored}_{$associationControllerPath}', 'action' => 'view', \${$singularVar}['{$alias}']['{$details['primaryKey']}'])); ?>\n\t\t\t&nbsp;\n\t\t</dd>\n";
+
+                                        $actions = array('index', 'view', 'add', 'edit', 'delete');
+                                        $configDisabledActions = Configure::read('admin.console.models.disabledActions');
+                                        $configDisabledActions = (!empty($configDisabledActions[$details['className']])) ? $configDisabledActions[$details['className']] : array();
+                                        $actions = array_diff($actions, $configDisabledActions);
+
+                                        if(array_search('view', $actions) !== false){
+                                            echo "\t\t<dd>\n\t\t\t<?php echo \$this->Html->link(\${$singularVar}['{$alias}']['toString'], array('plugin' => '{$backendPluginNameUnderscored}', 'controller' => '{$backendPluginNameUnderscored}_{$associationControllerPath}', 'action' => 'view', \${$singularVar}['{$alias}']['{$details['primaryKey']}'])); ?>\n\t\t\t&nbsp;\n\t\t</dd>\n";
+                                        } else {
+                                            echo "\t\t<dd>\n\t\t\t<?php echo \${$singularVar}['{$alias}']['toString']; ?>\n\t\t\t&nbsp;\n\t\t</dd>\n";
+                                        }
                                         break;
                                     }
                                 }
