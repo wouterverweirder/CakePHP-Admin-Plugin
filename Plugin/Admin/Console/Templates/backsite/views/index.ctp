@@ -7,14 +7,14 @@
         <div class="<?php echo $pluralVar;?> index search">
             <?php echo "<?php echo \$this->ExtendedForm->create('$modelClass', array('type' => 'get'));?>\n";?>
                 <fieldset>
-                    <legend><?php echo "<?php echo __('Search $singularHumanName'); ?>";?></legend>
+                    <legend style="margin-bottom: 0;"><?php echo "<?php echo __('Search $singularHumanName'); ?>";?></legend>
 
                     <?php foreach($configSearchableFields[$modelClass] as $searchableFieldName => $searchableFieldLabel): ?>
                     <?php echo "<?php echo \$this->ExtendedForm->input('{$modelClass}-{$searchableFieldName}', array('label' => '{$searchableFieldLabel}'));?>\n";?>
                     <?php endforeach; ?>
 
+                    <?php echo "<?php echo \$this->ExtendedForm->end(array('label' => __('Search $pluralHumanName'), 'class' => 'btn btn-default', 'div' => false, 'before' => '<div class=\"control-group\"><div class=\"controls\">', 'after' => \"\\n\" . '</div></div>'));?>\n";?>
                 </fieldset>
-            <?php echo "<?php echo \$this->ExtendedForm->end(__('Search $pluralHumanName'));?>";?>
         </div>
 <?php endif;?>
 
