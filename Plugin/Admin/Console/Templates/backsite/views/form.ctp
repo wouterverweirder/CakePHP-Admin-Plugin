@@ -70,7 +70,7 @@
                             $str .= ", " . var_export($explicitFieldOptions, true);
                         }
                         if (preg_match('/_id$/', $field)) {
-                            $str .= ", array('options' => \$" . Inflector::pluralize(Inflector::variable(str_replace('_id', '', $field))) . Select . ")";
+                            $str .= ", array('options' => \$" . Inflector::pluralize(Inflector::variable(str_replace('_id', '', $field))) . 'Select' . ")";
                         }
                         $str .= "));\n";
                         break;
@@ -80,7 +80,7 @@
                             $str .= ", " . var_export($explicitFieldOptions, true);
                         }
                         if (preg_match('/_id$/', $field)) {
-                            $str .= ", array('options' => \$" . Inflector::pluralize(Inflector::variable(str_replace('_id', '', $field))) . Select . ")";
+                            $str .= ", array('options' => \$" . Inflector::pluralize(Inflector::variable(str_replace('_id', '', $field))) . 'Select' . ")";
                         }
                         $str .= "));\n";
                         break;
