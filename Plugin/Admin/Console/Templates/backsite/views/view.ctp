@@ -4,22 +4,35 @@
 <?php
     //create tabs for associated models
     $tabnr = 1;
+
+    $configHiddenTabs = Configure::read('admin.console.views.view.hidden_tabs');
+    if(empty($configHiddenTabs)) $configHiddenTabs = array('all' => array());
+    $hiddenTabs = array();
+    if(!empty($configHiddenTabs['all'])) $hiddenTabs = $configHiddenTabs['all'];
+    if(!empty($configHiddenTabs[$modelClass])) $hiddenTabs = array_merge($hiddenTabs, $configHiddenTabs[$modelClass]);
+
     if (!empty($associations['hasOne'])) :
         foreach ($associations['hasOne'] as $alias => $details):
-            ++$tabnr;
-            echo "\t\t<li><a href=\"#tabs-{$tabnr}\" data-toggle=\"tab\"><?php echo __('" . Inflector::humanize(Inflector::underscore(Inflector::pluralize($alias))) . "');?></a></li>\n";
+            if(array_search($alias, $hiddenTabs) === false) {
+                ++$tabnr;
+                echo "\t\t<li><a href=\"#tabs-{$tabnr}\" data-toggle=\"tab\"><?php echo __('" . Inflector::humanize(Inflector::underscore(Inflector::pluralize($alias))) . "');?></a></li>\n";
+            }
         endforeach;
     endif;
     if (!empty($associations['hasMany'])) :
         foreach ($associations['hasMany'] as $alias => $details):
-            ++$tabnr;
-            echo "\t\t<li><a href=\"#tabs-{$tabnr}\" data-toggle=\"tab\"><?php echo __('" . Inflector::humanize(Inflector::underscore(Inflector::pluralize($alias))) . "');?></a></li>\n";
+            if(array_search($alias, $hiddenTabs) === false) {
+                ++$tabnr;
+                echo "\t\t<li><a href=\"#tabs-{$tabnr}\" data-toggle=\"tab\"><?php echo __('" . Inflector::humanize(Inflector::underscore(Inflector::pluralize($alias))) . "');?></a></li>\n";
+            }
         endforeach;
     endif;
     if (!empty($associations['hasAndBelongsToMany'])) :
         foreach ($associations['hasAndBelongsToMany'] as $alias => $details):
-            ++$tabnr;
-            echo "\t\t<li><a href=\"#tabs-{$tabnr}\" data-toggle=\"tab\"><?php echo __('" . Inflector::humanize(Inflector::underscore(Inflector::pluralize($alias))) . "');?></a></li>\n";
+            if(array_search($alias, $hiddenTabs) === false) {
+                ++$tabnr;
+                echo "\t\t<li><a href=\"#tabs-{$tabnr}\" data-toggle=\"tab\"><?php echo __('" . Inflector::humanize(Inflector::underscore(Inflector::pluralize($alias))) . "');?></a></li>\n";
+            }
         endforeach;
     endif;
 ?>
@@ -95,7 +108,7 @@
                     $configDisabledActions = (!empty($configDisabledActions[$modelClass])) ? $configDisabledActions[$modelClass] : array();
                     $actions = array_diff($actions, $configDisabledActions);
 
-                    if(array_search('edit', $actions) !== false) echo "\t\t\t\t<li><?php echo \$this->Html->link(__('Edit " . $singularHumanName ."'), array('action' => 'edit', \${$singularVar}['{$modelClass}']['{$primaryKey}'])); ?> </li>\n";
+                    if(array_search('edit', $actions) !== false) echo "\t\t\t\t<li><?php echo \$this->Html->link(__('Edit " . $singularHumanName ."'), array('action' => 'edit', \${$singularVar}['{$modelClass}']['{$primaryKey}'], '?' => array('redirect' => \$this->Html->url(array('action' => 'index'))))); ?> </li>\n";
                     if(array_search('delete', $actions) !== false) echo "\t\t\t\t<li><?php echo \$this->Form->postLink(__('Delete " . $singularHumanName . "'), array('action' => 'delete', \${$singularVar}['{$modelClass}']['{$primaryKey}'], '?' => array('redirect' => \$this->Html->url(array('action' => 'index')))), null, __('Are you sure you want to delete # %s?', \${$singularVar}['{$modelClass}']['{$primaryKey}'])); ?> </li>\n";
                     if(array_search('add', $actions) !== false) echo "\t\t\t\t<li><?php echo \$this->Html->link(__('New " . $singularHumanName . "'), array('action' => 'add')); ?> </li>\n";
                     if(array_search('index', $actions) !== false) echo "\t\t\t\t<li><?php echo \$this->Html->link(__('List " . $pluralHumanName . "'), array('action' => 'index')); ?> </li>\n";
@@ -111,8 +124,9 @@
     $tabnr = 1;
 if (!empty($associations['hasOne'])) :
     foreach ($associations['hasOne'] as $alias => $details):
-        $associationControllerName = Inflector::pluralize(Inflector::camelize($details['controller']));
-        $associationControllerPath = $details['controller'];
+        if(array_search($alias, $hiddenTabs) === false) {
+            $associationControllerName = Inflector::pluralize(Inflector::camelize($details['controller']));
+            $associationControllerPath = $details['controller'];
     ?>
     <div id="tabs-<?php echo ++$tabnr; ?>" class="tab-pane">
         <div class="related">
@@ -133,29 +147,30 @@ if (!empty($associations['hasOne'])) :
         </div>
     </div>
     <?php
+        }
     endforeach;
 endif;
 
 if(empty($associations['hasMany'])) $associations['hasMany'] = array();
 
 foreach ($associations['hasMany'] as $alias => $details):
-
-    $otherSingularVar = Inflector::variable(Inflector::singularize($details['controller']));
-    $otherPluralVar = Inflector::pluralize($otherSingularVar);
-    $otherControllerName = Inflector::pluralize(Inflector::camelize($details['controller']));
-    $otherControllerPath = $details['controller'];
-
-    $otherSingularHumanName = Inflector::humanize(Inflector::underscore($alias));
-    $otherPluralHumanName = Inflector::humanize(Inflector::underscore(Inflector::pluralize($alias)));
-    if(!empty($configAliases[$alias])) {
-        $otherSingularHumanName = Inflector::humanize(Inflector::underscore($configAliases[$alias]));
-        $otherPluralHumanName = Inflector::humanize(Inflector::underscore(Inflector::pluralize($configAliases[$alias])));
-    }
-
-    $actions = array('index', 'view', 'add', 'edit', 'delete');
-    $configDisabledActions = Configure::read('admin.console.models.disabledActions');
-    $configDisabledActions = (!empty($configDisabledActions[$alias])) ? $configDisabledActions[$alias] : array();
-    $actions = array_diff($actions, $configDisabledActions);
+    if(array_search($alias, $hiddenTabs) === false) {
+        $otherSingularVar = Inflector::variable(Inflector::singularize($details['controller']));
+        $otherPluralVar = Inflector::pluralize($otherSingularVar);
+        $otherControllerName = Inflector::pluralize(Inflector::camelize($details['controller']));
+        $otherControllerPath = $details['controller'];
+    
+        $otherSingularHumanName = Inflector::humanize(Inflector::underscore($alias));
+        $otherPluralHumanName = Inflector::humanize(Inflector::underscore(Inflector::pluralize($alias)));
+        if(!empty($configAliases[$alias])) {
+            $otherSingularHumanName = Inflector::humanize(Inflector::underscore($configAliases[$alias]));
+            $otherPluralHumanName = Inflector::humanize(Inflector::underscore(Inflector::pluralize($configAliases[$alias])));
+        }
+    
+        $actions = array('index', 'view', 'add', 'edit', 'delete');
+        $configDisabledActions = Configure::read('admin.console.models.disabledActions');
+        $configDisabledActions = (!empty($configDisabledActions[$alias])) ? $configDisabledActions[$alias] : array();
+        $actions = array_diff($actions, $configDisabledActions);
         ?>
     <div id="tabs-<?php echo ++$tabnr; ?>" class="tab-pane">
         <div class="related">
@@ -169,6 +184,7 @@ foreach ($associations['hasMany'] as $alias => $details):
         </div>
     </div>
 <?php
+    }
 endforeach;
 
 //HABTM
@@ -176,10 +192,11 @@ if(empty($associations['hasAndBelongsToMany'])) $associations['hasAndBelongsToMa
 
 $i = 0;
 foreach ($associations['hasAndBelongsToMany'] as $alias => $details):
-    $otherSingularVar = Inflector::variable($alias);
-    $otherPluralHumanName = Inflector::humanize($details['controller']);
-    $associationControllerName = Inflector::pluralize(Inflector::camelize($details['controller']));
-    $associationControllerPath = $details['controller'];
+    if(array_search($alias, $hiddenTabs) === false) {
+        $otherSingularVar = Inflector::variable($alias);
+        $otherPluralHumanName = Inflector::humanize($details['controller']);
+        $associationControllerName = Inflector::pluralize(Inflector::camelize($details['controller']));
+        $associationControllerPath = $details['controller'];
     ?>
     <div id="tabs-<?php echo ++$tabnr; ?>" class="tab-pane">
         <div class="related">
@@ -219,7 +236,10 @@ foreach ($associations['hasAndBelongsToMany'] as $alias => $details):
             </div>
         </div>
     </div>
-<?php endforeach;?>
+<?php
+    }
+    endforeach;
+?>
 </div>
 <script type="text/javascript">
 (function(){

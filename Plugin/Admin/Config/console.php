@@ -78,3 +78,12 @@ $config['admin.console.views.view.hidden_fields'] = array(
 	'all' => array(
     )
 );
+
+/**
+ * Tabs we won't show in the detail pages
+ * Use Model name as key, and relationship alias as values
+ */
+$config['admin.console.views.view.hidden_tabs'] = array(
+	'all' => array(
+    ),
+);
