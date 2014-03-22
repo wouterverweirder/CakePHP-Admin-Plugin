@@ -42,6 +42,7 @@
                         if(!empty($explicitFieldOptions)) {
                             $str .= ", " . var_export($explicitFieldOptions, true);
                         }
+                        $str .= ", array('options' => \$parent" . Inflector::pluralize($modelClass) . 'Select' . ", 'empty' => '- ' . __('Root') . ' -')";
                         $str .= "));\n";
                         break;
                     case 'password':
