@@ -11,6 +11,11 @@
     if(!empty($configHiddenTabs['all'])) $hiddenTabs = $configHiddenTabs['all'];
     if(!empty($configHiddenTabs[$modelClass])) $hiddenTabs = array_merge($hiddenTabs, $configHiddenTabs[$modelClass]);
 
+    if($modelObj->Behaviors->loaded('Tree')) {
+        ++$tabnr;
+        echo "\t\t<li><a href=\"#tabs-{$tabnr}\" data-toggle=\"tab\"><?php echo __('Child " . Inflector::humanize(Inflector::underscore(Inflector::pluralize($modelClass))) . "');?></a></li>\n";
+    }
+
     if (!empty($associations['hasOne'])) :
         foreach ($associations['hasOne'] as $alias => $details):
             if(array_search($alias, $hiddenTabs) === false) {
@@ -122,6 +127,25 @@
 
 <?php
     $tabnr = 1;
+if($modelObj->Behaviors->loaded('Tree')) {
+    $actions = array('index', 'view', 'add', 'edit', 'delete');
+    $configDisabledActions = Configure::read('admin.console.models.disabledActions');
+    $configDisabledActions = (!empty($configDisabledActions[$modelClass])) ? $configDisabledActions[$modelClass] : array();
+    $actions = array_diff($actions, $configDisabledActions);
+?>
+    <div id="tabs-<?php echo ++$tabnr; ?>" class="tab-pane">
+        <div class="related">
+            <h3><?php echo "<?php echo __('Child " . $pluralHumanName . "');?>";?></h3>
+            <div class="<?php echo $pluralVar;?> table">
+            <?php echo "<?php echo \$this->element('../{$backendPluginName}{$controllerName}/table', array('{$pluralVar}TableURL' => \${$pluralVar}TableURL, '{$pluralVar}' => \${$pluralVar}, '{$pluralVar}TableModelAlias' => '{$modelClass}', 'redirectUrl' => '/' . \$this->request->url . '#tabs-' . $tabnr));?>\n"; ?>
+            </div>
+            <div class="actions">
+                <?php if(array_search('add', $actions) !== false) echo "<?php echo \$this->Html->link(__('New " . $singularHumanName . "'), array('plugin' => '{$backendPluginNameUnderscored}', 'controller' => '{$backendPluginNameUnderscored}_{$controllerPath}', 'action' => 'add', 'parent_id' => \${$singularVar}['{$modelClass}']['{$primaryKey}'], '?' => array('redirect' => '/' . \$this->request->url . '#tabs-' . $tabnr)), array('class' => 'btn btn-primary'));?>";?> </li>
+            </div>
+        </div>
+    </div>
+<?php
+}
 if (!empty($associations['hasOne'])) :
     foreach ($associations['hasOne'] as $alias => $details):
         if(array_search($alias, $hiddenTabs) === false) {
