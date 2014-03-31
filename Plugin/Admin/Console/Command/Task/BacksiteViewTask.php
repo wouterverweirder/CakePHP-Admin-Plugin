@@ -151,7 +151,7 @@ class BacksiteViewTask extends BakeTask {
 
 		return compact('backendPluginName', 'backendPluginNameUnderscored', 'modelClass', 'schema', 'primaryKey', 'displayField', 'singularVar', 'pluralVar',
 				'singularHumanName', 'pluralHumanName', 'fields', 'associations',
-                'controllerName', 'controllerPath');
+                'controllerName', 'controllerPath', 'modelObj');
 	}
 
 	protected function _associations(Model $model) {
