@@ -12,12 +12,9 @@
 
         echo $this->Html->css('/' . $backendPluginNameUnderscored . '-plugin/css/bootstrap.min.css');
 
-		echo $this->Html->script('/' . $backendPluginNameUnderscored . '-plugin/js/jquery/jquery-1.8.2.min.js');
-		echo $this->Html->script('/' . $backendPluginNameUnderscored . '-plugin/js/bootstrap/bootstrap.min.js');
+        echo $this->Html->script('/' . $backendPluginNameUnderscored . '-plugin/js/vendors.min.js');
         echo $this->Html->script('/' . $backendPluginNameUnderscored . '-plugin/js/ckeditor/ckeditor.js');
         echo $this->Html->script('/' . $backendPluginNameUnderscored . '-plugin/js/ckfinder/ckfinder.js');
-
-        echo $this->Html->script('/' . $backendPluginNameUnderscored . '-plugin/js/admin.js?v=1');
 
 		echo $this->fetch('meta');
 		echo $this->fetch('css');
@@ -48,6 +45,7 @@
 		<div id="footer">
 		</div>
 	</div>
+	<?php echo $this->Html->script('/' . $backendPluginNameUnderscored . '-plugin/js/admin.min.js'); ?>
 	<?php echo $this->Js->writeBuffer(); ?>
 </body>
 </html>

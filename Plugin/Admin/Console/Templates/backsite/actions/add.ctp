@@ -32,7 +32,7 @@
 	if($modelObj->Behaviors->loaded('Tree')) {
 		$otherPluralName = $this->_pluralName('Parent' . $currentModelName);
 		echo "\t\t\${$otherPluralName} = \$this->{$currentModelName}->find('all', array('order' => '{$currentModelName}.lft'));\n";
-		echo "\t\t\${$otherPluralName}Select = \$this->{$currentModelName}->generateTreeList(null, '{n}.{$currentModelName}.id', '{n}.{$currentModelName}.' . \$this->{$currentModelName}->displayField, ' - ', 0);\n";
+		echo "\t\t\${$otherPluralName}Select = \$this->{$currentModelName}->generateTreeList(null, '{n}.{$currentModelName}.id', '{n}.{$currentModelName}.toString', ' - ', 0);\n";
 		$compact[] = "'{$otherPluralName}'";
 		$compact[] = "'{$otherPluralName}Select'";
 	}
@@ -45,10 +45,10 @@
 
                 if($otherModelObj->Behaviors->loaded('Tree')) {
                 	echo "\t\t\${$otherPluralName} = \$this->{$currentModelName}->{$otherModelName}->find('all', array('order' => '{$otherModelName}.lft'));\n";
-                    echo "\t\t\${$otherPluralName}Select = \$this->{$currentModelName}->{$otherModelName}->generateTreeList(null, '{n}.{$otherModelName}.id', '{n}.{$otherModelName}.' . \$this->{$currentModelName}->{$otherModelName}->displayField, ' - ', 0);\n";
+                    echo "\t\t\${$otherPluralName}Select = \$this->{$currentModelName}->{$otherModelName}->generateTreeList(null, '{n}.{$otherModelName}.id', '{n}.{$otherModelName}.toString', ' - ', 0);\n";
                 } else {
                     echo "\t\t\${$otherPluralName} = \$this->{$currentModelName}->{$otherModelName}->find('all', array('order' => '{$otherModelName}.'.\$this->{$currentModelName}->{$otherModelName}->displayField));\n";
-                    echo "\t\t\${$otherPluralName}Select = Hash::combine(\${$otherPluralName}, '{n}.{$otherModelName}.id', '{n}.{$otherModelName}.' . \$this->{$currentModelName}->{$otherModelName}->displayField);\n";
+                    echo "\t\t\${$otherPluralName}Select = Hash::combine(\${$otherPluralName}, '{n}.{$otherModelName}.id', '{n}.{$otherModelName}.toString');\n";
                 }
 
 				$compact[] = "'{$otherPluralName}'";

@@ -1,0 +1,16 @@
+{
+  "name": "cakephp-admin-plugin",
+  "description": "JS Build Tool For Cakephp Admin Plugin",
+  "version": "0.0.1",
+  "homepage": "http://wouterverweirder.github.io",
+  "author": "Wouter Verweirder <wouter.verweirder@gmail.com>",
+  "devDependencies": {
+    "gulp": "latest",
+    "gulp-browserify": "latest",
+    "browserify-handlebars": "latest",
+    "gulp-concat": "latest",
+    "gulp-jshint": "latest",
+    "gulp-plumber": "latest",
+    "gulp-uglify": "latest"
+  }
+}
