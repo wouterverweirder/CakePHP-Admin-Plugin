@@ -20,6 +20,7 @@ module.exports = (function(){
 			this.updateVisibility();
 
 			this.setValue(this.$valueElement.val());
+			$(document).trigger('initSimpleFileUpload', this);
 		},
 
 		parseOptions: function(options) {
