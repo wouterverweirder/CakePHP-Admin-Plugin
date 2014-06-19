@@ -12,3 +12,6 @@
         $this->redirect($this->Auth->logout());
     }
     
+    protected function _isAuthorized($user) {
+        return ($this->action == 'login' || $this->action == 'logout');
+    }

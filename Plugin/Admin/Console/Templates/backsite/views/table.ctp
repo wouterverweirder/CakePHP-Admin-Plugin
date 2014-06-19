@@ -69,10 +69,18 @@
     }
 
     foreach($schemaForTable as $field => $properties) {
-        echo "\t<th><?php echo \$this->Paginator->sort('{$field}', null, array('model' => \${$pluralVar}TableModelAlias));?></th>\n";
+        $label = $field;
+        if (!empty($associations['belongsTo'])) {
+            foreach ($associations['belongsTo'] as $alias => $details) {
+                if ($field === $details['foreignKey']) {
+                    $label = $alias;
+                }
+            }
+        }
+        echo "\t<th><?php echo \$this->Paginator->sort('{$field}', __d('{$backendPluginNameUnderscored}', '{$label}'), array('model' => \${$pluralVar}TableModelAlias));?></th>\n";
     }
 ?>
-    <th class="actions"><?php echo "<?php echo __('Actions');?>";?></th>
+    <th class="actions"><?php echo "<?php echo __d('{$backendPluginNameUnderscored}', 'Actions');?>";?></th>
 </tr>
 <?php
 echo "<?php
@@ -125,9 +133,9 @@ echo "\t<tr>\n";
     $configDisabledActions = (!empty($configDisabledActions[$modelClass])) ? $configDisabledActions[$modelClass] : array();
     $actions = array_diff($actions, $configDisabledActions);
 
-    if(array_search('view', $actions) !== false) echo "\t\t\t<?php echo \$this->Html->link(__('View'), array('plugin' => '{$backendPluginNameUnderscored}', 'controller' => '{$backendPluginNameUnderscored}_{$controllerPath}', 'action' => 'view', \${$singularVar}[\${$pluralVar}TableModelAlias]['{$primaryKey}']), array('class' => 'btn btn-info btn-mini')); ?>\n";
-    if(array_search('edit', $actions) !== false) echo "\t\t\t<?php echo \$this->Html->link(__('Edit'), array('plugin' => '{$backendPluginNameUnderscored}', 'controller' => '{$backendPluginNameUnderscored}_{$controllerPath}', 'action' => 'edit', \${$singularVar}[\${$pluralVar}TableModelAlias]['{$primaryKey}'], '?' => array('redirect' => \$redirectUrl)), array('class' => 'btn btn-mini')); ?>\n";
-    if(array_search('delete', $actions) !== false) echo "\t\t\t<?php echo \$this->Form->postLink(__('Delete'), array('plugin' => '{$backendPluginNameUnderscored}', 'controller' => '{$backendPluginNameUnderscored}_{$controllerPath}', 'action' => 'delete', \${$singularVar}[\${$pluralVar}TableModelAlias]['{$primaryKey}'], '?' => array('redirect' => \$redirectUrl)), array('class' => 'btn btn-danger btn-mini'), __('Are you sure you want to delete # %s?', \${$singularVar}[\${$pluralVar}TableModelAlias]['{$primaryKey}'])); ?>\n";
+    if(array_search('view', $actions) !== false) echo "\t\t\t<?php echo \$this->Html->link(__d('{$backendPluginNameUnderscored}', 'View'), array('plugin' => '{$backendPluginNameUnderscored}', 'controller' => '{$backendPluginNameUnderscored}_{$controllerPath}', 'action' => 'view', \${$singularVar}[\${$pluralVar}TableModelAlias]['{$primaryKey}']), array('class' => 'btn btn-info btn-mini')); ?>\n";
+    if(array_search('edit', $actions) !== false) echo "\t\t\t<?php echo \$this->Html->link(__d('{$backendPluginNameUnderscored}', 'Edit'), array('plugin' => '{$backendPluginNameUnderscored}', 'controller' => '{$backendPluginNameUnderscored}_{$controllerPath}', 'action' => 'edit', \${$singularVar}[\${$pluralVar}TableModelAlias]['{$primaryKey}'], '?' => array('redirect' => \$redirectUrl)), array('class' => 'btn btn-mini')); ?>\n";
+    if(array_search('delete', $actions) !== false) echo "\t\t\t<?php echo \$this->Form->postLink(__d('{$backendPluginNameUnderscored}', 'Delete'), array('plugin' => '{$backendPluginNameUnderscored}', 'controller' => '{$backendPluginNameUnderscored}_{$controllerPath}', 'action' => 'delete', \${$singularVar}[\${$pluralVar}TableModelAlias]['{$primaryKey}'], '?' => array('redirect' => \$redirectUrl)), array('class' => 'btn btn-danger btn-mini'), __d('{$backendPluginNameUnderscored}', 'Are you sure you want to delete # %s?', \${$singularVar}[\${$pluralVar}TableModelAlias]['{$primaryKey}'])); ?>\n";
     
     echo "\t\t</td>\n";
 echo "\t</tr>\n";
@@ -138,7 +146,7 @@ echo "<?php endforeach; ?>\n";
 <p>
 <?php echo "<?php
 echo \$this->Paginator->counter(array(
-'format' => __('Page {:page} of {:pages}, showing {:current} records out of {:count} total, starting on record {:start}, ending on {:end}'),
+'format' => __d('{$backendPluginNameUnderscored}', 'Page {:page} of {:pages}, showing {:current} records out of {:count} total, starting on record {:start}, ending on {:end}'),
 'model' => \${$pluralVar}TableModelAlias
 ));
 ?>";?>

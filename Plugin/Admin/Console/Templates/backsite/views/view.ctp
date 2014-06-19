@@ -1,6 +1,6 @@
-<h2><?php echo "<?php  echo __('{$singularHumanName}') . ': ' . \${$singularVar}['{$modelClass}']['toString'];?>";?></h2>
+<h2><?php echo "<?php  echo __d('{$backendPluginNameUnderscored}', '{$singularHumanName}') . ': ' . \${$singularVar}['{$modelClass}']['toString'];?>";?></h2>
 <ul class="nav nav-tabs">
-    <li class="active"><a href="#tabs-1" data-toggle="tab"><?php echo "<?php  echo __('Details');?>";?></a></li>
+    <li class="active"><a href="#tabs-1" data-toggle="tab"><?php echo "<?php  echo __d('{$backendPluginNameUnderscored}', 'Details');?>";?></a></li>
 <?php
     //create tabs for associated models
     $tabnr = 1;
@@ -13,14 +13,14 @@
 
     if($modelObj->Behaviors->loaded('Tree')) {
         ++$tabnr;
-        echo "\t\t<li><a href=\"#tabs-{$tabnr}\" data-toggle=\"tab\"><?php echo __('Child " . Inflector::humanize(Inflector::underscore(Inflector::pluralize($modelClass))) . "');?></a></li>\n";
+        echo "\t\t<li><a href=\"#tabs-{$tabnr}\" data-toggle=\"tab\"><?php echo __d('{$backendPluginNameUnderscored}', 'Child " . Inflector::humanize(Inflector::underscore(Inflector::pluralize($modelClass))) . "');?></a></li>\n";
     }
 
     if (!empty($associations['hasOne'])) :
         foreach ($associations['hasOne'] as $alias => $details):
             if(array_search($alias, $hiddenTabs) === false) {
                 ++$tabnr;
-                echo "\t\t<li><a href=\"#tabs-{$tabnr}\" data-toggle=\"tab\"><?php echo __('" . Inflector::humanize(Inflector::underscore(Inflector::pluralize($alias))) . "');?></a></li>\n";
+                echo "\t\t<li><a href=\"#tabs-{$tabnr}\" data-toggle=\"tab\"><?php echo __d('{$backendPluginNameUnderscored}', '" . Inflector::humanize(Inflector::underscore(Inflector::pluralize($alias))) . "');?></a></li>\n";
             }
         endforeach;
     endif;
@@ -28,7 +28,7 @@
         foreach ($associations['hasMany'] as $alias => $details):
             if(array_search($alias, $hiddenTabs) === false) {
                 ++$tabnr;
-                echo "\t\t<li><a href=\"#tabs-{$tabnr}\" data-toggle=\"tab\"><?php echo __('" . Inflector::humanize(Inflector::underscore(Inflector::pluralize($alias))) . "');?></a></li>\n";
+                echo "\t\t<li><a href=\"#tabs-{$tabnr}\" data-toggle=\"tab\"><?php echo __d('{$backendPluginNameUnderscored}', '" . Inflector::humanize(Inflector::underscore(Inflector::pluralize($alias))) . "');?></a></li>\n";
             }
         endforeach;
     endif;
@@ -36,7 +36,7 @@
         foreach ($associations['hasAndBelongsToMany'] as $alias => $details):
             if(array_search($alias, $hiddenTabs) === false) {
                 ++$tabnr;
-                echo "\t\t<li><a href=\"#tabs-{$tabnr}\" data-toggle=\"tab\"><?php echo __('" . Inflector::humanize(Inflector::underscore(Inflector::pluralize($alias))) . "');?></a></li>\n";
+                echo "\t\t<li><a href=\"#tabs-{$tabnr}\" data-toggle=\"tab\"><?php echo __d('{$backendPluginNameUnderscored}', '" . Inflector::humanize(Inflector::underscore(Inflector::pluralize($alias))) . "');?></a></li>\n";
             }
         endforeach;
     endif;
@@ -63,7 +63,7 @@
                                         $isKey = true;
                                         $associationControllerName = Inflector::pluralize(Inflector::camelize($details['controller']));
                                         $associationControllerPath = $details['controller'];
-                                        echo "\t\t\t\t<dt><?php echo __('" . Inflector::humanize(Inflector::underscore($alias)) . "'); ?></dt>\n";
+                                        echo "\t\t\t\t<dt><?php echo __d('{$backendPluginNameUnderscored}', '" . Inflector::humanize(Inflector::underscore($alias)) . "'); ?></dt>\n";
 
                                         $actions = array('index', 'view', 'add', 'edit', 'delete');
                                         $configDisabledActions = Configure::read('admin.console.models.disabledActions');
@@ -80,7 +80,7 @@
                                 }
                             }
                             if ($isKey !== true) {
-                                echo "\t\t\t\t<dt><?php echo __('" . Inflector::humanize($field) . "'); ?></dt>\n";
+                                echo "\t\t\t\t<dt><?php echo __d('{$backendPluginNameUnderscored}', '" . Inflector::humanize($field) . "'); ?></dt>\n";
                                 echo "\t\t\t\t<dd>\n\t\t\t";
                                 switch($field) {
                                     case 'image1':
@@ -113,10 +113,10 @@
                     $configDisabledActions = (!empty($configDisabledActions[$modelClass])) ? $configDisabledActions[$modelClass] : array();
                     $actions = array_diff($actions, $configDisabledActions);
 
-                    if(array_search('edit', $actions) !== false) echo "\t\t\t\t<li><?php echo \$this->Html->link(__('Edit " . $singularHumanName ."'), array('action' => 'edit', \${$singularVar}['{$modelClass}']['{$primaryKey}'], '?' => array('redirect' => \$this->Html->url(array('action' => 'index'))))); ?> </li>\n";
-                    if(array_search('delete', $actions) !== false) echo "\t\t\t\t<li><?php echo \$this->Form->postLink(__('Delete " . $singularHumanName . "'), array('action' => 'delete', \${$singularVar}['{$modelClass}']['{$primaryKey}'], '?' => array('redirect' => \$this->Html->url(array('action' => 'index')))), null, __('Are you sure you want to delete # %s?', \${$singularVar}['{$modelClass}']['{$primaryKey}'])); ?> </li>\n";
-                    if(array_search('add', $actions) !== false) echo "\t\t\t\t<li><?php echo \$this->Html->link(__('New " . $singularHumanName . "'), array('action' => 'add')); ?> </li>\n";
-                    if(array_search('index', $actions) !== false) echo "\t\t\t\t<li><?php echo \$this->Html->link(__('List " . $pluralHumanName . "'), array('action' => 'index')); ?> </li>\n";
+                    if(array_search('edit', $actions) !== false) echo "\t\t\t\t<li><?php echo \$this->Html->link(__d('{$backendPluginNameUnderscored}', 'Edit " . $singularHumanName ."'), array('action' => 'edit', \${$singularVar}['{$modelClass}']['{$primaryKey}'], '?' => array('redirect' => \$this->Html->url(array('action' => 'index'))))); ?> </li>\n";
+                    if(array_search('delete', $actions) !== false) echo "\t\t\t\t<li><?php echo \$this->Form->postLink(__d('{$backendPluginNameUnderscored}', 'Delete " . $singularHumanName . "'), array('action' => 'delete', \${$singularVar}['{$modelClass}']['{$primaryKey}'], '?' => array('redirect' => \$this->Html->url(array('action' => 'index')))), null, __d('{$backendPluginNameUnderscored}', 'Are you sure you want to delete # %s?', \${$singularVar}['{$modelClass}']['{$primaryKey}'])); ?> </li>\n";
+                    if(array_search('add', $actions) !== false) echo "\t\t\t\t<li><?php echo \$this->Html->link(__d('{$backendPluginNameUnderscored}', 'New " . $singularHumanName . "'), array('action' => 'add')); ?> </li>\n";
+                    if(array_search('index', $actions) !== false) echo "\t\t\t\t<li><?php echo \$this->Html->link(__d('{$backendPluginNameUnderscored}', 'List " . $pluralHumanName . "'), array('action' => 'index')); ?> </li>\n";
                 ?>
                         </ul>
                     </div>
@@ -135,12 +135,12 @@ if($modelObj->Behaviors->loaded('Tree')) {
 ?>
     <div id="tabs-<?php echo ++$tabnr; ?>" class="tab-pane">
         <div class="related">
-            <h3><?php echo "<?php echo __('Child " . $pluralHumanName . "');?>";?></h3>
+            <h3><?php echo "<?php echo __d('{$backendPluginNameUnderscored}', 'Child " . $pluralHumanName . "');?>";?></h3>
             <div class="<?php echo $pluralVar;?> table">
             <?php echo "<?php echo \$this->element('../{$backendPluginName}{$controllerName}/table', array('{$pluralVar}TableURL' => \${$pluralVar}TableURL, '{$pluralVar}' => \${$pluralVar}, '{$pluralVar}TableModelAlias' => '{$modelClass}', 'redirectUrl' => '/' . \$this->request->url . '#tabs-' . $tabnr));?>\n"; ?>
             </div>
             <div class="actions">
-                <?php if(array_search('add', $actions) !== false) echo "<?php echo \$this->Html->link(__('New " . $singularHumanName . "'), array('plugin' => '{$backendPluginNameUnderscored}', 'controller' => '{$backendPluginNameUnderscored}_{$controllerPath}', 'action' => 'add', 'parent_id' => \${$singularVar}['{$modelClass}']['{$primaryKey}'], '?' => array('redirect' => '/' . \$this->request->url . '#tabs-' . $tabnr)), array('class' => 'btn btn-primary'));?>";?> </li>
+                <?php if(array_search('add', $actions) !== false) echo "<?php echo \$this->Html->link(__d('{$backendPluginNameUnderscored}', 'New " . $singularHumanName . "'), array('plugin' => '{$backendPluginNameUnderscored}', 'controller' => '{$backendPluginNameUnderscored}_{$controllerPath}', 'action' => 'add', 'parent_id' => \${$singularVar}['{$modelClass}']['{$primaryKey}'], '?' => array('redirect' => '/' . \$this->request->url . '#tabs-' . $tabnr)), array('class' => 'btn btn-primary'));?>";?> </li>
             </div>
         </div>
     </div>
@@ -154,19 +154,19 @@ if (!empty($associations['hasOne'])) :
     ?>
     <div id="tabs-<?php echo ++$tabnr; ?>" class="tab-pane">
         <div class="related">
-            <h3><?php echo "<?php echo __('Related " . Inflector::humanize($details['controller']) . "');?>";?></h3>
+            <h3><?php echo "<?php echo __d('{$backendPluginNameUnderscored}', 'Related " . Inflector::humanize($details['controller']) . "');?>";?></h3>
         <?php echo "<?php if (!empty(\${$singularVar}['{$alias}'])):?>\n";?>
             <dl>
         <?php
             foreach ($details['fields'] as $field) {
-                echo "\t\t<dt><?php echo __('" . Inflector::humanize($field) . "');?></dt>\n";
+                echo "\t\t<dt><?php echo __d('{$backendPluginNameUnderscored}', '" . Inflector::humanize($field) . "');?></dt>\n";
                 echo "\t\t<dd>\n\t<?php echo \${$singularVar}['{$alias}']['{$field}'];?>\n&nbsp;</dd>\n";
             }
         ?>
             </dl>
         <?php echo "<?php endif; ?>\n";?>
             <div class="actions">
-                <?php echo "<?php echo \$this->Html->link(__('Edit " . Inflector::humanize(Inflector::underscore($alias)) . "'), array('plugin' => '{$backendPluginNameUnderscored}', 'controller' => '{$backendPluginNameUnderscored}_{$associationControllerPath}', 'action' => 'edit', \${$singularVar}['{$alias}']['{$details['primaryKey']}']), array('class' => 'btn')); ?></li>\n";?>
+                <?php echo "<?php echo \$this->Html->link(__d('{$backendPluginNameUnderscored}', 'Edit " . Inflector::humanize(Inflector::underscore($alias)) . "'), array('plugin' => '{$backendPluginNameUnderscored}', 'controller' => '{$backendPluginNameUnderscored}_{$associationControllerPath}', 'action' => 'edit', \${$singularVar}['{$alias}']['{$details['primaryKey']}']), array('class' => 'btn')); ?></li>\n";?>
             </div>
         </div>
     </div>
@@ -198,12 +198,12 @@ foreach ($associations['hasMany'] as $alias => $details):
         ?>
     <div id="tabs-<?php echo ++$tabnr; ?>" class="tab-pane">
         <div class="related">
-            <h3><?php echo "<?php echo __('" . $otherPluralHumanName . "');?>";?></h3>
+            <h3><?php echo "<?php echo __d('{$backendPluginNameUnderscored}', '" . $otherPluralHumanName . "');?>";?></h3>
             <div class="<?php echo $otherPluralVar;?> table">
             <?php echo "<?php echo \$this->element('../{$backendPluginName}{$otherControllerName}/table', array('{$otherPluralVar}TableURL' => \${$otherPluralVar}TableURL, '{$otherPluralVar}' => \${$otherPluralVar}, '{$otherPluralVar}TableModelAlias' => '{$alias}', 'redirectUrl' => '/' . \$this->request->url . '#tabs-' . $tabnr));?>\n"; ?>
             </div>
             <div class="actions">
-                <?php if(array_search('add', $actions) !== false) echo "<?php echo \$this->Html->link(__('New " . $otherSingularHumanName . "'), array('plugin' => '{$backendPluginNameUnderscored}', 'controller' => '{$backendPluginNameUnderscored}_{$otherControllerPath}', 'action' => 'add', '{$details['foreignKey']}' => \${$singularVar}['{$modelClass}']['{$primaryKey}'], '?' => array('redirect' => '/' . \$this->request->url . '#tabs-' . $tabnr)), array('class' => 'btn btn-primary'));?>";?> </li>
+                <?php if(array_search('add', $actions) !== false) echo "<?php echo \$this->Html->link(__d('{$backendPluginNameUnderscored}', 'New " . $otherSingularHumanName . "'), array('plugin' => '{$backendPluginNameUnderscored}', 'controller' => '{$backendPluginNameUnderscored}_{$otherControllerPath}', 'action' => 'add', '{$details['foreignKey']}' => \${$singularVar}['{$modelClass}']['{$primaryKey}'], '?' => array('redirect' => '/' . \$this->request->url . '#tabs-' . $tabnr)), array('class' => 'btn btn-primary'));?>";?> </li>
             </div>
         </div>
     </div>
@@ -224,16 +224,16 @@ foreach ($associations['hasAndBelongsToMany'] as $alias => $details):
     ?>
     <div id="tabs-<?php echo ++$tabnr; ?>" class="tab-pane">
         <div class="related">
-            <h3><?php echo "<?php echo __('Related " . $otherPluralHumanName . "');?>";?></h3>
+            <h3><?php echo "<?php echo __d('{$backendPluginNameUnderscored}', 'Related " . $otherPluralHumanName . "');?>";?></h3>
             <?php echo "<?php if (!empty(\${$singularVar}['{$alias}'])):?>\n";?>
             <table cellpadding = "0" cellspacing = "0">
             <tr>
         <?php
                     foreach ($details['fields'] as $field) {
-                        echo "\t\t<th><?php echo __('" . Inflector::humanize($field) . "'); ?></th>\n";
+                        echo "\t\t<th><?php echo __d('{$backendPluginNameUnderscored}', '" . Inflector::humanize($field) . "'); ?></th>\n";
                     }
         ?>
-                <th class="actions"><?php echo "<?php echo __('Actions');?>";?></th>
+                <th class="actions"><?php echo "<?php echo __d('{$backendPluginNameUnderscored}', 'Actions');?>";?></th>
             </tr>
         <?php
         echo "\t<?php
@@ -245,9 +245,9 @@ foreach ($associations['hasAndBelongsToMany'] as $alias => $details):
                     }
 
                     echo "\t\t\t<td class=\"actions\">\n";
-                    echo "\t\t\t\t<?php echo \$this->Html->link(__('View'), array('plugin' => '{$backendPluginNameUnderscored}', 'controller' => '{$backendPluginNameUnderscored}_{$associationControllerPath}', 'action' => 'view', \${$otherSingularVar}['{$details['primaryKey']}']), array('class' => 'btn btn-info btn-mini')); ?>\n";
-                    echo "\t\t\t\t<?php echo \$this->Html->link(__('Edit'), array('plugin' => '{$backendPluginNameUnderscored}', 'controller' => '{$backendPluginNameUnderscored}_{$associationControllerPath}', 'action' => 'edit', \${$otherSingularVar}['{$details['primaryKey']}']), array('class' => 'btn btn-mini')); ?>\n";
-                    echo "\t\t\t\t<?php echo \$this->Form->postLink(__('Delete'), array('plugin' => '{$backendPluginNameUnderscored}', 'controller' => '{$backendPluginNameUnderscored}_{$associationControllerPath}', 'action' => 'delete', \${$otherSingularVar}['{$details['primaryKey']}']), array('class' => 'btn btn-danger btn-mini'), __('Are you sure you want to delete # %s?', \${$otherSingularVar}['{$details['primaryKey']}'])); ?>\n";
+                    echo "\t\t\t\t<?php echo \$this->Html->link(__d('{$backendPluginNameUnderscored}', 'View'), array('plugin' => '{$backendPluginNameUnderscored}', 'controller' => '{$backendPluginNameUnderscored}_{$associationControllerPath}', 'action' => 'view', \${$otherSingularVar}['{$details['primaryKey']}']), array('class' => 'btn btn-info btn-mini')); ?>\n";
+                    echo "\t\t\t\t<?php echo \$this->Html->link(__d('{$backendPluginNameUnderscored}', 'Edit'), array('plugin' => '{$backendPluginNameUnderscored}', 'controller' => '{$backendPluginNameUnderscored}_{$associationControllerPath}', 'action' => 'edit', \${$otherSingularVar}['{$details['primaryKey']}']), array('class' => 'btn btn-mini')); ?>\n";
+                    echo "\t\t\t\t<?php echo \$this->Form->postLink(__d('{$backendPluginNameUnderscored}', 'Delete'), array('plugin' => '{$backendPluginNameUnderscored}', 'controller' => '{$backendPluginNameUnderscored}_{$associationControllerPath}', 'action' => 'delete', \${$otherSingularVar}['{$details['primaryKey']}']), array('class' => 'btn btn-danger btn-mini'), __d('{$backendPluginNameUnderscored}', 'Are you sure you want to delete # %s?', \${$otherSingularVar}['{$details['primaryKey']}'])); ?>\n";
                     echo "\t\t\t</td>\n";
                 echo "\t\t</tr>\n";
 
@@ -256,7 +256,7 @@ foreach ($associations['hasAndBelongsToMany'] as $alias => $details):
             </table>
         <?php echo "<?php endif; ?>\n\n";?>
             <div class="actions">
-                <?php echo "<?php echo \$this->Html->link(__('New " . Inflector::humanize(Inflector::underscore($alias)) . "'), array('plugin' => '{$backendPluginNameUnderscored}', 'controller' => '{$backendPluginNameUnderscored}_{$associationControllerPath}', 'action' => 'add'), array('class' => 'btn btn-primary'));?>";?> </li>
+                <?php echo "<?php echo \$this->Html->link(__d('{$backendPluginNameUnderscored}', 'New " . Inflector::humanize(Inflector::underscore($alias)) . "'), array('plugin' => '{$backendPluginNameUnderscored}', 'controller' => '{$backendPluginNameUnderscored}_{$associationControllerPath}', 'action' => 'add'), array('class' => 'btn btn-primary'));?>";?> </li>
             </div>
         </div>
     </div>

@@ -1,4 +1,4 @@
-<h2><?php echo "<?php echo __('{$pluralHumanName}');?>";?></h2>
+<h2><?php echo "<?php echo __d('{$backendPluginNameUnderscored}', '{$pluralHumanName}');?>";?></h2>
 
 <?php
     $configSearchableFields = Configure::read('admin.console.views.index.searchable_fields');
@@ -7,13 +7,13 @@
         <div class="<?php echo $pluralVar;?> index search">
             <?php echo "<?php echo \$this->ExtendedForm->create('$modelClass', array('type' => 'get'));?>\n";?>
                 <fieldset>
-                    <legend style="margin-bottom: 0;"><?php echo "<?php echo __('Search $singularHumanName'); ?>";?></legend>
+                    <legend style="margin-bottom: 0;"><?php echo "<?php echo __d('{$backendPluginNameUnderscored}', 'Search $singularHumanName'); ?>";?></legend>
 
                     <?php foreach($configSearchableFields[$modelClass] as $searchableFieldName => $searchableFieldLabel): ?>
                     <?php echo "<?php echo \$this->ExtendedForm->input('{$modelClass}-{$searchableFieldName}', array('label' => '{$searchableFieldLabel}'));?>\n";?>
                     <?php endforeach; ?>
 
-                    <?php echo "<?php echo \$this->ExtendedForm->end(array('label' => __('Search $pluralHumanName'), 'class' => 'btn btn-default', 'div' => false, 'before' => '<div class=\"control-group\"><div class=\"controls\">', 'after' => \"\\n\" . '</div></div>'));?>\n";?>
+                    <?php echo "<?php echo \$this->ExtendedForm->end(array('label' => __d('{$backendPluginNameUnderscored}', 'Search $pluralHumanName'), 'class' => 'btn btn-default', 'div' => false, 'before' => '<div class=\"control-group\"><div class=\"controls\">', 'after' => \"\\n\" . '</div></div>'));?>\n";?>
                 </fieldset>
         </div>
 <?php endif;?>
@@ -31,7 +31,7 @@ if(array_search('add', $actions) !== false):
 ?>
         <div class="actions">
 
-            <h3><?php echo "<?php echo __('Actions'); ?>"; ?></h3>
-            <?php echo "<?php echo \$this->Html->link(__('New " . $singularHumanName . "'), array('action' => 'add'), array('class' => 'btn btn-primary')); ?>";?>
+            <h3><?php echo "<?php echo __d('{$backendPluginNameUnderscored}', 'Actions'); ?>"; ?></h3>
+            <?php echo "<?php echo \$this->Html->link(__d('{$backendPluginNameUnderscored}', 'New " . $singularHumanName . "'), array('action' => 'add'), array('class' => 'btn btn-primary')); ?>";?>
         </div>
 <?php endif;?>
