@@ -46,7 +46,7 @@
     <div id="tabs-1" class="tab-pane active">
         <div class="<?php echo $pluralVar;?> view container-fluid">
             <div class="row-fluid">
-                <div class="span9">
+                <div class="span10">
                     <dl class="dl-horizontal">
                     <?php
                     $configHiddenFields = Configure::read('admin.console.views.view.hidden_fields');
@@ -100,12 +100,12 @@
                     </dl>
                 </div>
                 <div class="actions span2">
-                    <div class="btn-group">
+                    <div class="btn-group pull-right">
                         <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#">
                             <?php echo "<?php echo __d('{$backendPluginNameUnderscored}', 'Actions');?>";?>
                             <span class="caret"></span>
                         </a>
-                        <ul class="dropdown-menu">
+                        <ul class="dropdown-menu pull-right">
                 <?php
 
                     $actions = array('index', 'view', 'add', 'edit', 'delete');
@@ -183,14 +183,14 @@ foreach ($associations['hasMany'] as $alias => $details):
         $otherPluralVar = Inflector::pluralize($otherSingularVar);
         $otherControllerName = Inflector::pluralize(Inflector::camelize($details['controller']));
         $otherControllerPath = $details['controller'];
-    
+
         $otherSingularHumanName = Inflector::humanize(Inflector::underscore($alias));
         $otherPluralHumanName = Inflector::humanize(Inflector::underscore(Inflector::pluralize($alias)));
         if(!empty($configAliases[$alias])) {
             $otherSingularHumanName = Inflector::humanize(Inflector::underscore($configAliases[$alias]));
             $otherPluralHumanName = Inflector::humanize(Inflector::underscore(Inflector::pluralize($configAliases[$alias])));
         }
-    
+
         $actions = array('index', 'view', 'add', 'edit', 'delete');
         $configDisabledActions = Configure::read('admin.console.models.disabledActions');
         $configDisabledActions = (!empty($configDisabledActions[$alias])) ? $configDisabledActions[$alias] : array();
