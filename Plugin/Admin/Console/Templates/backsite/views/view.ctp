@@ -47,7 +47,7 @@
         <div class="<?php echo $pluralVar;?> view container-fluid">
             <div class="row-fluid">
                 <div class="span9">
-                    <dl>
+                    <dl class="dl-horizontal">
                     <?php
                     $configHiddenFields = Configure::read('admin.console.views.view.hidden_fields');
                     if(empty($configHiddenFields)) $configHiddenFields = array('all' => array());
@@ -102,7 +102,7 @@
                 <div class="actions span2">
                     <div class="btn-group">
                         <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#">
-                            Actions
+                            <?php echo "<?php echo __d('{$backendPluginNameUnderscored}', 'Actions');?>";?>
                             <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu">
