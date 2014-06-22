@@ -54,7 +54,7 @@
                     $hiddenFields = array();
                     if(!empty($configHiddenFields['all'])) $hiddenFields = $configHiddenFields['all'];
                     if(!empty($configHiddenFields[$modelClass])) $hiddenFields = array_merge($hiddenFields, $configHiddenFields[$modelClass]);
-                    foreach ($fields as $field) {
+                    foreach ($schema as $field => $properties) {
                         $isKey = false;
                         if(array_search($field, $hiddenFields) === false) {
                             if (!empty($associations['belongsTo'])) {
@@ -82,10 +82,10 @@
                             if ($isKey !== true) {
                                 echo "\t\t\t\t<dt><?php echo __d('{$backendPluginNameUnderscored}', '" . Inflector::humanize($field) . "'); ?></dt>\n";
                                 echo "\t\t\t\t<dd>\n\t\t\t";
-                                switch($field) {
-                                    case 'image1':
-                                    case 'image2':
-                                        echo "<?php if(!empty(\${$singularVar}['{$modelClass}']['{$field}'])) echo \$this->Html->image('/files/images/' . \${$singularVar}['{$modelClass}']['{$field}']); ?>\n";
+                                $fieldType = $properties['type'];
+                                switch($fieldType) {
+                                    case 'boolean':
+                                        echo "<i class=\"icon-<?php echo (empty(\${$singularVar}['{$modelClass}']['{$field}'])) ? 'remove' : 'ok';?>\"></i>";
                                         break;
                                     default:
                                         echo "<?php echo h(\${$singularVar}['{$modelClass}']['{$field}']); ?>\n";
