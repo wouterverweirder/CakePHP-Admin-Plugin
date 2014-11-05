@@ -90,4 +90,32 @@ class ToStringBehavior extends ModelBehavior {
         }
         return $results;
     }
+
+    public function addTreePrefixes(Model $Model, $results, $spacer = '_', $right = 'rght') {
+        $stack = array();
+        foreach ($results as $i => $result) {
+            $count = count($stack);
+            while ($stack && ($stack[$count - 1] < $result[$Model->alias][$right])) {
+                array_pop($stack);
+                $count--;
+            }
+            $results[$i][$Model->alias]['toString'] = str_repeat($spacer, $count) . $results[$i][$Model->alias]['toString'];
+            $stack[] = $result[$Model->alias][$right];
+        }
+        return $results;
+    }
+
+    public function convertToListItemsWithDataAttributes(Model $Model, $results) {
+        foreach($results as &$result) {
+            $keys = array_keys($result);
+            $values = array_values($result);
+            foreach ($keys as &$key) {
+                $key = 'data-' . $key;
+            }
+            $result = array_combine($keys, $values);
+            $result['value'] = $result['data-id'];
+            $result['name'] = $result['data-toString'];
+        }
+        return $results;
+    }
 }

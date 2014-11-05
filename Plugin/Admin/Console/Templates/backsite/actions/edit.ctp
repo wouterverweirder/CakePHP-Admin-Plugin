@@ -18,7 +18,9 @@
 		if($modelObj->Behaviors->loaded('Tree')) {
 			$otherPluralName = $this->_pluralName('Parent' . $currentModelName);
 			echo "\t\t\${$otherPluralName} = \$this->{$currentModelName}->find('all', array('order' => '{$currentModelName}.lft'));\n";
-			echo "\t\t\${$otherPluralName}Select = \$this->{$currentModelName}->generateTreeList(null, '{n}.{$currentModelName}.id', '{n}.{$currentModelName}.toString', ' - ', 0);\n";
+			echo "\t\t\${$otherPluralName}Select = \$this->{$currentModelName}->addTreePrefixes(\${$otherPluralName});\n";
+			echo "\t\t\${$otherPluralName}Select = Hash::combine(\${$otherPluralName}Select, '{n}.{$currentModelName}.id', '{n}.{$currentModelName}');\n";
+			echo "\t\t\${$otherPluralName}Select = \$this->{$currentModelName}->convertToListItemsWithDataAttributes(\${$otherPluralName}Select);\n";
 			$compact[] = "'{$otherPluralName}'";
 			$compact[] = "'{$otherPluralName}Select'";
 		}
@@ -31,11 +33,17 @@
 
                     if($otherModelObj->Behaviors->loaded('Tree')) {
                     	echo "\t\t\${$otherPluralName} = \$this->{$currentModelName}->{$otherModelName}->find('all', array('order' => '{$otherModelName}.lft'));\n";
-	                    echo "\t\t\${$otherPluralName}Select = \$this->{$currentModelName}->{$otherModelName}->generateTreeList(null, '{n}.{$otherModelName}.id', '{n}.{$otherModelName}.toString', ' - ', 0);\n";
+	                    echo "\t\t\${$otherPluralName}Select = \$this->{$currentModelName}->{$otherModelName}->addTreePrefixes(\${$otherPluralName});\n";
+											echo "\t\t\${$otherPluralName}Select = Hash::combine(\${$otherPluralName}Select, '{n}.{$otherModelName}.id', '{n}.{$otherModelName}');\n";
+											echo "\t\t\${$otherPluralName}Select = \$this->{$currentModelName}->{$otherModelName}->convertToListItemsWithDataAttributes(\${$otherPluralName}Select);\n";
 	                } else {
 	                    echo "\t\t\${$otherPluralName} = \$this->{$currentModelName}->{$otherModelName}->find('all', array('order' => '{$otherModelName}.'.\$this->{$currentModelName}->{$otherModelName}->displayField));\n";
-	                    echo "\t\t\${$otherPluralName}Select = Hash::combine(\${$otherPluralName}, '{n}.{$otherModelName}.id', '{n}.{$otherModelName}.toString');\n";
+	                    echo "\t\t\${$otherPluralName}Select = Hash::combine(\${$otherPluralName}, '{n}.{$otherModelName}.id', '{n}.{$otherModelName}');\n";
+	                    echo "\t\t\${$otherPluralName}Select = \$this->{$currentModelName}->convertToListItemsWithDataAttributes(\${$otherPluralName}Select);\n";
+	                    echo "\t\t\${$otherPluralName}Select = Hash::sort(\${$otherPluralName}Select, '{n}.name', 'asc');\n";
 	                }
+
+	                echo "\t\tasort(\${$otherPluralName}Select);\n";
 
 					$compact[] = "'{$otherPluralName}'";
 					$compact[] = "'{$otherPluralName}Select'";
@@ -48,4 +56,4 @@
 		endif;
 	?>
 	}
-	
+
