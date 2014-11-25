@@ -6,13 +6,14 @@
 		if ($this->request->is('post') || $this->request->is('put')) {
 			if ($this-><?php echo $currentModelName; ?>->save($this->request->data)) {
 				$this->Session->setFlash(__('The <?php echo strtolower($singularHumanName); ?> has been saved'), 'default', array(), 'good');
-                $this->redirect($this->redirectUrl);
+				$this->redirect($this->redirectUrl);
 			} else {
 				$this->Session->setFlash(__('The <?php echo strtolower($singularHumanName); ?> could not be saved. Please, try again.'), 'default', array(), 'bad');
 			}
 		} else {
-            $<?php echo $singularName; ?> = $this-><?php echo $currentModelName; ?>->read(null, $id);
+			$<?php echo $singularName; ?> = $this-><?php echo $currentModelName; ?>->read(null, $id);
 			$this->request->data = $<?php echo $singularName; ?>;
+			$this->set('<?php echo $singularName; ?>', $<?php echo $singularName; ?>);
 		}
 <?php
 		if($modelObj->Behaviors->loaded('Tree')) {
