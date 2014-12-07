@@ -99,7 +99,15 @@
                     ?>
                     </dl>
                 </div>
-                <div class="actions span2">
+                <?php
+                $actions = array('index', 'view', 'add', 'edit', 'delete');
+                $configDisabledActions = Configure::read('admin.console.models.disabledActions');
+                $configDisabledActions = (!empty($configDisabledActions[$modelClass])) ? $configDisabledActions[$modelClass] : array();
+                $actions = array_diff($actions, $configDisabledActions);
+
+                $minHeight = sizeof($actions) * 26 + 30;
+                ?>
+                <div class="actions span2" style="min-height: <?php echo $minHeight;?>px;">
                     <div class="btn-group pull-right">
                         <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#">
                             <?php echo "<?php echo __d('{$backendPluginNameUnderscored}', 'Actions');?>";?>
@@ -107,12 +115,6 @@
                         </a>
                         <ul class="dropdown-menu pull-right">
                 <?php
-
-                    $actions = array('index', 'view', 'add', 'edit', 'delete');
-                    $configDisabledActions = Configure::read('admin.console.models.disabledActions');
-                    $configDisabledActions = (!empty($configDisabledActions[$modelClass])) ? $configDisabledActions[$modelClass] : array();
-                    $actions = array_diff($actions, $configDisabledActions);
-
                     if(array_search('edit', $actions) !== false) echo "\t\t\t\t<li><?php echo \$this->Html->link(__d('{$backendPluginNameUnderscored}', 'Edit " . $singularHumanName ."'), array('action' => 'edit', \${$singularVar}['{$modelClass}']['{$primaryKey}'], '?' => array('redirect' => \$this->Html->url(array('action' => 'index'))))); ?> </li>\n";
                     if(array_search('delete', $actions) !== false) echo "\t\t\t\t<li><?php echo \$this->Form->postLink(__d('{$backendPluginNameUnderscored}', 'Delete " . $singularHumanName . "'), array('action' => 'delete', \${$singularVar}['{$modelClass}']['{$primaryKey}'], '?' => array('redirect' => \$this->Html->url(array('action' => 'index')))), null, __d('{$backendPluginNameUnderscored}', 'Are you sure you want to delete # %s?', \${$singularVar}['{$modelClass}']['{$primaryKey}'])); ?> </li>\n";
                     if(array_search('add', $actions) !== false) echo "\t\t\t\t<li><?php echo \$this->Html->link(__d('{$backendPluginNameUnderscored}', 'New " . $singularHumanName . "'), array('action' => 'add')); ?> </li>\n";
